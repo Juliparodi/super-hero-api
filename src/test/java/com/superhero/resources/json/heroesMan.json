@@ -1,0 +1,34 @@
+[
+  {
+    "id": 1,
+    "name": "Superman",
+    "description": "The Man of Steel",
+    "birthDate": "1938-04-18",
+    "creationDate": "2023-08-30",
+    "modifiedDate": "2023-08-30"
+  },
+  {
+    "id": 2,
+    "name": "Spider-Man",
+    "description": "Your friendly neighborhood superhero",
+    "birthDate": "1962-08-10",
+    "creationDate": "2023-08-30",
+    "modifiedDate": "2023-08-30"
+  },
+  {
+    "id": 3,
+    "name": "Wonder Woman",
+    "description": "Amazonian princess with super strength",
+    "birthDate": "1941-12-01",
+    "creationDate": "2023-08-30",
+    "modifiedDate": "2023-08-30"
+  },
+  {
+    "id": 4,
+    "name": "Batman",
+    "description": "The Dark Knight of Gotham City",
+    "birthDate": "1939-03-30",
+    "creationDate": "2023-08-30",
+    "modifiedDate": "2023-08-30"
+  }
+]
