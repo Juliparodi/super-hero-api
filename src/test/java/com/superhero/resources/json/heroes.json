@@ -30,29 +30,5 @@
     "birthDate": "1939-03-30",
     "creationDate": "2023-08-30",
     "modifiedDate": "2023-08-30"
-  },
-  {
-    "id": 5,
-    "name": "Captain America",
-    "description": "The super-soldier with an unbreakable shield",
-    "birthDate": "1941-03-01",
-    "creationDate": "2023-08-30",
-    "modifiedDate": "2023-08-30"
-  },
-  {
-    "id": 6,
-    "name": "Green Lantern",
-    "description": "Guardian of Sector 2814 with a power ring",
-    "birthDate": "1940-07-09",
-    "creationDate": "2023-08-30",
-    "modifiedDate": "2023-08-30"
-  },
-  {
-    "id": 7,
-    "name": "Black Widow",
-    "description": "Master spy and skilled hand-to-hand combatant",
-    "birthDate": "1964-04-04",
-    "creationDate": "2023-08-30",
-    "modifiedDate": "2023-08-30"
   }
 ]

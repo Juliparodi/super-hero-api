@@ -19,6 +19,8 @@ public class JsonConverter {
 
     public static final String fileAbsolutePath = "src/test/java/com/superhero/resources/json/";
 
+    private JsonConverter(){}
+
 
     public static <T> List<T> getListObjectsFromJsonFile(Class<T> clazz, String fileName) throws IOException {
         Gson gson = new GsonBuilder()

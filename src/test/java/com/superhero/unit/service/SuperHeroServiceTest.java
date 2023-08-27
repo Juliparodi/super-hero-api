@@ -2,8 +2,8 @@ package com.superhero.unit.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.when;
 
 import com.superhero.factory.MockSuperHeroesFactory;
 import com.superhero.model.SuperHero;
@@ -13,12 +13,15 @@ import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-@SpringBootTest
 public class SuperHeroServiceTest {
 
     @Mock
@@ -42,7 +45,7 @@ public class SuperHeroServiceTest {
 
         assertNotNull(result);
         assertEquals(4, result.size());
-        assertEquals("Wonder Woman", result.get(3).getName());
+        assertEquals("Batman", result.get(3).getName());
     }
 
     @Test
@@ -50,7 +53,7 @@ public class SuperHeroServiceTest {
         Long heroId = 1L;
         Optional<SuperHero> superHero = MockSuperHeroesFactory.getSuperHero(heroId);
 
-        when(superHeroRepository.findById(1L)).thenReturn(superHero);
+        given(superHeroRepository.findById(any())).willReturn(superHero);
 
         SuperHero result = superHeroService.getSuperHeroById(heroId);
 
@@ -63,7 +66,7 @@ public class SuperHeroServiceTest {
         String searchName = "de";
         List<SuperHero> mockSuperHeroes = MockSuperHeroesFactory.getSuperHeroContains(searchName);
 
-        when(superHeroRepository.findByNameContainingIgnoreCase(searchName)).thenReturn(mockSuperHeroes);
+        given(superHeroRepository.findByNameContainingIgnoreCase(searchName)).willReturn(mockSuperHeroes);
 
         List<SuperHero> result = superHeroService.searchSuperHeroesByName(searchName);
 

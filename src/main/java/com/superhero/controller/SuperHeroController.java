@@ -2,7 +2,10 @@ package com.superhero.controller;
 
 import com.superhero.model.SuperHero;
 import com.superhero.services.ISuperHeroService;
+import com.superhero.utils.ValidationUtils;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -33,12 +36,14 @@ public class SuperHeroController {
 
     @GetMapping("/{id}")
     public ResponseEntity<SuperHero> getSuperHeroById(@PathVariable Long id) {
+        ValidationUtils.validateLong(id);
         SuperHero superHero = superHeroService.getSuperHeroById(id);
         return ResponseEntity.ok(superHero);
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<SuperHero>> searchSuperHeroesByName(@RequestParam @NotEmpty String name) {
+    public ResponseEntity<List<SuperHero>> searchSuperHeroesByName(@RequestParam String name) {
+        ValidationUtils.validateString(name);
         List<SuperHero> matchingSuperHeroes = superHeroService.searchSuperHeroesByName(name);
         return ResponseEntity.ok(matchingSuperHeroes);
     }

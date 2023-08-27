@@ -8,6 +8,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface SuperHeroRepository extends JpaRepository<SuperHero, Long> {
 
-
     List<SuperHero> findByNameContainingIgnoreCase(String searchName);
 }

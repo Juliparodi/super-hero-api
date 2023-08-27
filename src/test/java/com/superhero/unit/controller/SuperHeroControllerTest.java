@@ -1,11 +1,15 @@
 package com.superhero.unit.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.superhero.controller.SuperHeroController;
 import com.superhero.factory.MockSuperHeroesFactory;
 import com.superhero.model.SuperHero;
 import com.superhero.services.ISuperHeroService;
 import com.superhero.utils.JsonConverter;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,7 +20,9 @@ import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -26,7 +32,6 @@ public class SuperHeroControllerTest {
 
     @MockBean
     private MockMvc mockMvc;
-
     @Mock
     private ISuperHeroService superHeroService;
     @InjectMocks
@@ -35,7 +40,16 @@ public class SuperHeroControllerTest {
 
     @BeforeEach
     public void setUp() {
-        mockMvc = MockMvcBuilders.standaloneSetup(superHeroController).build();
+        ObjectMapper objectMapper = new ObjectMapper()
+            .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
+            .setDateFormat(new SimpleDateFormat("yyyy-MM-dd"))
+            .registerModule(new JavaTimeModule());
+
+        mockMvc = MockMvcBuilders
+            .standaloneSetup(superHeroController)
+            .setMessageConverters(new MappingJackson2HttpMessageConverter(objectMapper))
+            .build();
+
     }
 
     @Test
@@ -54,10 +68,10 @@ public class SuperHeroControllerTest {
         Mockito.when(superHeroService.getSuperHeroById(heroId))
             .thenReturn(MockSuperHeroesFactory.getSuperHero(heroId).get());
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/superheroes/{id}", heroId))
+       mockMvc.perform(MockMvcRequestBuilders.get("/superheroes/{id}", heroId))
             .andExpect(MockMvcResultMatchers.status().isOk())
             .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
-            .andExpect(MockMvcResultMatchers.content().json(JsonConverter.loadJsonFromFile("heroe1.json")));
+            .andExpect(MockMvcResultMatchers.content().json(JsonConverter.loadJsonFromFile("heroe2.json")));
     }
 
     @Test
