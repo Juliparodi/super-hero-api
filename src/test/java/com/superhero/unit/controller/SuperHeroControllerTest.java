@@ -11,7 +11,8 @@ import static com.superhero.factory.MockSuperHeroesFactory.inputUpdatedSuperHero
 import static com.superhero.factory.MockSuperHeroesFactory.newSuperHero;
 import static com.superhero.utils.JsonConverter.toJson;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -24,32 +25,22 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.superhero.constants.ExceptionConstants;
-import com.superhero.constants.OutputMessageConstants;
 import com.superhero.controller.SuperHeroController;
-import com.superhero.exception.SuperHeroNotFoundException;
-import com.superhero.factory.MockSuperHeroesFactory;
 import com.superhero.model.SuperHero;
 import com.superhero.services.ISuperHeroService;
 import com.superhero.utils.JsonConverter;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 @SpringBootTest
@@ -91,14 +82,14 @@ public class SuperHeroControllerTest {
     @Test
     @SneakyThrows
     void testGetSuperHeroById() {
-        Long heroId = 2L;
+        Long heroId = 3L;
         when(superHeroService.getSuperHeroById(heroId))
             .thenReturn(getSuperHero(heroId).get());
 
        mockMvc.perform(get("/superheroes/{id}", heroId))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-            .andExpect(content().json(JsonConverter.loadJsonFromFile("heroe2.json")));
+            .andExpect(content().json(JsonConverter.loadJsonFromFile("heroe3.json")));
     }
 
     @Test
@@ -120,14 +111,15 @@ public class SuperHeroControllerTest {
     void testCreateSuperHero() {
         SuperHero inputSuperHero = newSuperHero();
 
-        when(superHeroService.createSuperHero(inputSuperHero)).thenReturn(inputSuperHero);
+        when(superHeroService.createSuperHero(any())).thenReturn(inputSuperHero);
 
-        String outputMessage = String.format(MESSAGE_OUTPUT, inputSuperHero.getName(), CREATED);
+        String outputMessage = String.format(MESSAGE_OUTPUT, inputSuperHero.getId(), CREATED);
 
-
-        mockMvc.perform(post("/superheroes")
+       ResultActions resultActions =mockMvc.perform(post("/superheroes/hero")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(JsonConverter.loadJsonFromFile("newHeroe.json")))
+                .content(JsonConverter.loadJsonFromFile("newHeroe.json")));
+
+       resultActions
             .andExpect(status().isOk())
             .andExpect(content().json(toJson(outputMessage)));
 
@@ -142,17 +134,20 @@ public class SuperHeroControllerTest {
         SuperHero toBeUpdatedSuperHero = getSuperHero(heroId).get();
         toBeUpdatedSuperHero.setDescription("Wonder Woman, also known as Diana Prince, is an iconic superheroine and a founding member of the Justice League");
 
-        when(superHeroService.updateSuperHero(toBeUpdatedSuperHero, heroId)).thenReturn(inputSuperHero);
+        when(superHeroService.updateSuperHero(any(), anyLong())).thenReturn(inputSuperHero);
 
-        String outputMessage = String.format(MESSAGE_OUTPUT, toBeUpdatedSuperHero.getName(), UPDATED);
-        mockMvc.perform(put("/superheroes/{id}", heroId)
+        String outputMessage = String.format(MESSAGE_OUTPUT, toBeUpdatedSuperHero.getId(), UPDATED);
+
+        ResultActions resultActions = mockMvc.perform(put("/superheroes/hero/{id}", heroId)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(JsonConverter.loadJsonFromFile("heroe2.json")))
+                .content(JsonConverter.loadJsonFromFile("heroe3.json")));
+
+        resultActions
             .andExpect(status().isOk())
             .andExpect(content().json(toJson(outputMessage)));
 
 
-        verify(superHeroService).updateSuperHero(any(), any());
+        verify(superHeroService).updateSuperHero(any(), anyLong());
     }
 
     @Test
@@ -161,16 +156,16 @@ public class SuperHeroControllerTest {
         Long heroId = 1L;
         SuperHero deletedSuperHero = getSuperHero(heroId).get();
 
-        when(superHeroService.deleteSuperHero(deletedSuperHero, heroId)).thenReturn(deletedSuperHero);
+        when(superHeroService.deleteSuperHero(anyLong())).thenReturn(deletedSuperHero);
 
-        String outputMessage = String.format(MESSAGE_OUTPUT, deletedSuperHero.getName(), DELETED);
+        String outputMessage = String.format(MESSAGE_OUTPUT, deletedSuperHero.getId(), DELETED);
 
-        mockMvc.perform(delete("/superheroes/{id}", heroId)
+        mockMvc.perform(delete("/superheroes/hero/{id}", heroId)
                 .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(content().json(toJson(outputMessage)));
 
-        verify(superHeroService).deleteSuperHero(any(), any());
+        verify(superHeroService).deleteSuperHero(anyLong());
     }
 
 }

@@ -139,12 +139,11 @@ public class SuperHeroServiceTest {
         Long heroId = 1L;
         SuperHero superHeroToDelete = getSuperHero(heroId).get();
 
-        given(superHeroRepository.existsById(heroId)).willReturn(true);
+        given(superHeroRepository.findById(heroId)).willReturn(Optional.of(superHeroToDelete));
+
+        SuperHero result = superHeroService.deleteSuperHero(heroId);
+
         verify(superHeroRepository, times(1)).deleteById(heroId);
-
-        SuperHero result = superHeroService.deleteSuperHero(superHeroToDelete, heroId);
-
-        assertEquals(superHeroToDelete, result);
     }
 
 }

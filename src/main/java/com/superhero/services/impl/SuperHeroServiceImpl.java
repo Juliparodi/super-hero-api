@@ -6,7 +6,6 @@ import com.superhero.model.SuperHero;
 import com.superhero.repository.SuperHeroRepository;
 import com.superhero.services.ISuperHeroService;
 import java.util.List;
-import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,9 +28,7 @@ public class SuperHeroServiceImpl implements ISuperHeroService {
 
     @Override
     public SuperHero getSuperHeroById(Long id) {
-        Optional<SuperHero> superHero = superHeroRepository.findById(id);
-        return superHero.orElseThrow(() -> new SuperHeroNotFoundException(String.format(
-            ExceptionConstants.SUPER_HEROE_WITH_ID_NOT_FOUND, id)));
+        return findById(id);
     }
 
     @Override
@@ -44,17 +41,40 @@ public class SuperHeroServiceImpl implements ISuperHeroService {
 
     @Override
     public SuperHero createSuperHero(SuperHero superHero) {
-        return null;
+        return superHeroRepository.save(superHero);
     }
 
     @Override
-    public SuperHero updateSuperHero(SuperHero superHero, long parseLong) {
-        return null;
+    public SuperHero updateSuperHero(SuperHero inputSuperHero, long id) {
+
+        SuperHero superHeroFound = findById(id);
+
+        SuperHero superHeroUpdated = SuperHero.builder()
+            .id(superHeroFound.getId())
+            .name(inputSuperHero.getName())
+            .description(inputSuperHero.getDescription())
+            .birthDate(inputSuperHero.getBirthDate())
+            .creationDate(superHeroFound.getCreationDate())
+            .build();
+
+        return superHeroRepository.save(superHeroUpdated);
     }
 
     @Override
-    public SuperHero deleteSuperHero(SuperHero superHero, long parseLong) {
-        return null;
+    public SuperHero deleteSuperHero(long id) {
+
+        SuperHero superHeroFound = findById(id);
+
+        superHeroRepository.deleteById(id);
+
+        return superHeroFound;
+
+    }
+
+    private SuperHero findById(long id) {
+        return superHeroRepository.findById(id)
+            .orElseThrow(() -> new SuperHeroNotFoundException(
+                String.format(ExceptionConstants.SUPER_HEROE_WITH_ID_NOT_FOUND, id)));
     }
 
     private List<SuperHero> validateAndGetSuperHeroes(List<SuperHero> superHeroes, String message) {

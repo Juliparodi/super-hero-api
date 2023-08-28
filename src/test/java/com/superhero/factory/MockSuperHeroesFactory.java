@@ -39,6 +39,7 @@ public class MockSuperHeroesFactory {
 
     public static SuperHero inputUpdatedSuperHero() {
         return SuperHero.builder()
+            .id(3)
             .name("Wonder Woman")
             .description("Wonder Woman, also known as Diana Prince, is an iconic superheroine and a founding member of the Justice League")
             .birthDate(LocalDate.parse("1941-12-01"))

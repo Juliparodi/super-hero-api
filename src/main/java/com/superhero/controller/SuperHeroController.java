@@ -1,14 +1,18 @@
 package com.superhero.controller;
 
+import static com.superhero.constants.ExceptionConstants.VALIDATE_PARAMS_NOT_EMPTY;
 import static com.superhero.constants.OutputMessageConstants.CREATED;
 import static com.superhero.constants.OutputMessageConstants.DELETED;
 import static com.superhero.constants.OutputMessageConstants.MESSAGE_OUTPUT;
 import static com.superhero.constants.OutputMessageConstants.UPDATED;
+import static com.superhero.utils.ValidationUtils.validateString;
+import static com.superhero.utils.ValidationUtils.validateStringConvertToLong;
 
-import com.superhero.constants.OutputMessageConstants;
 import com.superhero.model.SuperHero;
 import com.superhero.services.ISuperHeroService;
-import com.superhero.utils.ValidationUtils;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -44,39 +48,36 @@ public class SuperHeroController {
 
     @GetMapping("/{id}")
     public ResponseEntity<SuperHero> getSuperHeroById(@PathVariable String id) {
-        ValidationUtils.validateString(id);
-        SuperHero superHero = superHeroService.getSuperHeroById(Long.parseLong(id));
+        Long heroId = validateStringConvertToLong(id);
+        SuperHero superHero = superHeroService.getSuperHeroById(heroId);
         return ResponseEntity.ok(superHero);
     }
 
     @GetMapping("/search")
     public ResponseEntity<List<SuperHero>> searchSuperHeroesByName(@RequestParam String name) {
-        ValidationUtils.validateString(name);
+        validateString(name);
         List<SuperHero> matchingSuperHeroes = superHeroService.searchSuperHeroesByName(name);
         return ResponseEntity.ok(matchingSuperHeroes);
     }
 
-    @PostMapping
-    public ResponseEntity<String> createSuperHero(@RequestBody SuperHero superHero) {
+    @PostMapping("/hero")
+    public ResponseEntity<String> createSuperHero(@RequestBody @Valid SuperHero superHero) {
         SuperHero superHeroCreated = superHeroService.createSuperHero(superHero);
-        String outputMessage = String.format(MESSAGE_OUTPUT, superHeroCreated.getName(),CREATED);
-        return ResponseEntity.ok(outputMessage);
+        return ResponseEntity.ok(String.format(MESSAGE_OUTPUT, superHeroCreated.getId(), CREATED));
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<String> updateSuperHero(@RequestBody SuperHero superHero, @PathVariable String id) {
-        ValidationUtils.validateString(id);
-        SuperHero superHeroUpdated = superHeroService.updateSuperHero(superHero, Long.parseLong(id));
-        String outputMessage = String.format(MESSAGE_OUTPUT, superHeroUpdated.getName(), UPDATED);
-        return ResponseEntity.ok(outputMessage);
+    @PutMapping("/hero/{id}")
+    public ResponseEntity<String> updateSuperHero(@RequestBody @Valid SuperHero superHero, @PathVariable String id) {
+        Long heroId = validateStringConvertToLong(id);
+        SuperHero superHeroUpdated = superHeroService.updateSuperHero(superHero, heroId);
+        return ResponseEntity.ok(String.format(MESSAGE_OUTPUT, superHeroUpdated.getId(), UPDATED));
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteSuperHero(@RequestBody SuperHero superHero, @PathVariable String id) {
-        ValidationUtils.validateString(id);
-        SuperHero superHeroDeleted = superHeroService.deleteSuperHero(superHero, Long.parseLong(id));
-        String outputMessage = String.format(MESSAGE_OUTPUT, superHeroDeleted.getName(),DELETED);
-        return ResponseEntity.ok(outputMessage);
+    @DeleteMapping("/hero/{id}")
+    public ResponseEntity<String> deleteSuperHero(@PathVariable String id) {
+        Long heroId = validateStringConvertToLong(id);
+        superHeroService.deleteSuperHero(heroId);
+        return ResponseEntity.ok(String.format(MESSAGE_OUTPUT, id, DELETED));
     }
 
 }

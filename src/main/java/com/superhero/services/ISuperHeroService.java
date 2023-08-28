@@ -14,6 +14,6 @@ public interface ISuperHeroService {
     SuperHero createSuperHero(SuperHero superHero);
     SuperHero updateSuperHero(SuperHero superHero, long parseLong);
 
-    SuperHero deleteSuperHero(SuperHero superHero, long parseLong);
+    SuperHero deleteSuperHero(long parseLong);
 
 }
