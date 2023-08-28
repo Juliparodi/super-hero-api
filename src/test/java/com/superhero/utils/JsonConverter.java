@@ -21,20 +21,14 @@ public class JsonConverter {
 
     private JsonConverter(){}
 
-
-    public static <T> List<T> getListObjectsFromJsonFile(Class<T> clazz, String fileName) throws IOException {
-        Gson gson = new GsonBuilder()
-            .registerTypeAdapter(LocalDate.class, new LocalDateTypeAdapter())
-            .create();
-        Type objectType = TypeToken.getParameterized(List.class, clazz).getType();
-        String jsonContent = loadJsonFromFile(fileName);
-        return gson.fromJson(jsonContent, objectType);
-    }
-
     public static String loadJsonFromFile(String fileName) throws IOException {
         String fileLocation = fileAbsolutePath + fileName;
         byte[] fileBytes = Files.readAllBytes(Paths.get(fileLocation));
         return new String(fileBytes, StandardCharsets.UTF_8);
+    }
+
+    public static String toJson(String message) {
+        return new Gson().toJson(message);
     }
 
 }

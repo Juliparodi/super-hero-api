@@ -10,4 +10,10 @@ public interface ISuperHeroService {
     SuperHero getSuperHeroById(Long id);
 
     List<SuperHero> searchSuperHeroesByName(String name);
+
+    SuperHero createSuperHero(SuperHero superHero);
+    SuperHero updateSuperHero(SuperHero superHero, long parseLong);
+
+    SuperHero deleteSuperHero(SuperHero superHero, long parseLong);
+
 }

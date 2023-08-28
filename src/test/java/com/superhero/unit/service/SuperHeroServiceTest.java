@@ -1,26 +1,31 @@
 package com.superhero.unit.service;
 
+import static com.superhero.factory.MockSuperHeroesFactory.createNewSuperHeroe;
+import static com.superhero.factory.MockSuperHeroesFactory.getAllSuperHeroes;
+import static com.superhero.factory.MockSuperHeroesFactory.getSuperHero;
+import static com.superhero.factory.MockSuperHeroesFactory.getSuperHeroContains;
+import static com.superhero.factory.MockSuperHeroesFactory.inputUpdatedSuperHero;
+import static com.superhero.factory.MockSuperHeroesFactory.newSuperHero;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
-import com.superhero.factory.MockSuperHeroesFactory;
+import com.superhero.exception.SuperHeroNotFoundException;
 import com.superhero.model.SuperHero;
 import com.superhero.repository.SuperHeroRepository;
 import com.superhero.services.impl.SuperHeroServiceImpl;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 public class SuperHeroServiceTest {
 
@@ -36,8 +41,8 @@ public class SuperHeroServiceTest {
     }
 
     @Test
-    public void testGetAllSuperHeroes() {
-        List<SuperHero> mockSuperHeroes = MockSuperHeroesFactory.getAllSuperHeroes();
+    void testGetAllSuperHeroes() {
+        List<SuperHero> mockSuperHeroes = getAllSuperHeroes();
 
         given(superHeroRepository.findAll()).willReturn(mockSuperHeroes);
 
@@ -49,9 +54,9 @@ public class SuperHeroServiceTest {
     }
 
     @Test
-    public void testGetSuperHeroById() {
+    void testGetSuperHeroById() {
         Long heroId = 1L;
-        Optional<SuperHero> superHero = MockSuperHeroesFactory.getSuperHero(heroId);
+        Optional<SuperHero> superHero = getSuperHero(heroId);
 
         given(superHeroRepository.findById(any())).willReturn(superHero);
 
@@ -62,9 +67,9 @@ public class SuperHeroServiceTest {
     }
 
     @Test
-    public void testSearchSuperHeroesByName() {
+    void testSearchSuperHeroesByName() {
         String searchName = "de";
-        List<SuperHero> mockSuperHeroes = MockSuperHeroesFactory.getSuperHeroContains(searchName);
+        List<SuperHero> mockSuperHeroes = getSuperHeroContains(searchName);
 
         given(superHeroRepository.findByNameContainingIgnoreCase(searchName)).willReturn(mockSuperHeroes);
 
@@ -74,6 +79,72 @@ public class SuperHeroServiceTest {
         assertEquals(2, result.size());
         assertEquals("Wonder Woman", result.get(1).getName());
 
+    }
+
+    @Test
+    void testGetSuperHeroById_ThrowsExceptionWhenNotFound() {
+        long heroId = 1L;
+
+        given(superHeroRepository.findById(heroId)).willReturn(Optional.empty());
+
+        assertThrows(SuperHeroNotFoundException.class, () -> superHeroService.getSuperHeroById(heroId));
+    }
+
+    @Test
+    void testSearchSuperHeroesByName_ThrowsExceptionWhenNotFound() {
+        String heroName = "man";
+
+        given(superHeroRepository.findByNameContainingIgnoreCase(heroName)).willReturn(Collections.emptyList());
+
+        assertThrows(SuperHeroNotFoundException.class, () -> superHeroService.searchSuperHeroesByName(heroName));
+    }
+
+    @Test
+    void testGetAllSuperHeroes_ThrowsExceptionWhenNotFound() {
+        given(superHeroRepository.findAll()).willReturn(Collections.emptyList());
+
+        assertThrows(SuperHeroNotFoundException.class, () -> superHeroService.getAllSuperHeroes());
+    }
+
+    @Test
+    void testCreateSuperHero() {
+        SuperHero inputSuperHero = newSuperHero();
+        SuperHero createdSuperHero = createNewSuperHeroe(inputSuperHero);
+
+        given(superHeroRepository.save(any())).willReturn(createdSuperHero);
+
+        SuperHero result = superHeroService.createSuperHero(inputSuperHero);
+
+        assertEquals(createdSuperHero, result);
+    }
+
+    @Test
+    void testUpdateSuperHero() {
+        Long heroId = 1L;
+        SuperHero inputSuperHero = inputUpdatedSuperHero();
+        SuperHero foundSuperHero = getSuperHero(heroId).get();
+        foundSuperHero.setDescription("Superman possesses immense strength, enabling him to lift enormous objects and face formidable foes.");
+        SuperHero updatedSuperHero = foundSuperHero;
+
+        given(superHeroRepository.findById(heroId)).willReturn(Optional.of(foundSuperHero));
+        given(superHeroRepository.save(any())).willReturn(updatedSuperHero);
+
+        SuperHero result = superHeroService.updateSuperHero(inputSuperHero, heroId);
+
+        assertEquals(updatedSuperHero, result);
+    }
+
+    @Test
+    void testDeleteSuperHero() {
+        Long heroId = 1L;
+        SuperHero superHeroToDelete = getSuperHero(heroId).get();
+
+        given(superHeroRepository.existsById(heroId)).willReturn(true);
+        verify(superHeroRepository, times(1)).deleteById(heroId);
+
+        SuperHero result = superHeroService.deleteSuperHero(superHeroToDelete, heroId);
+
+        assertEquals(superHeroToDelete, result);
     }
 
 }

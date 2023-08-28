@@ -19,7 +19,7 @@ public class SuperHeroRepositoryTest {
     private SuperHeroRepository superHeroRepository;
 
     @Test
-    public void testFindByNameContainingIgnoreCase() {
+    void testFindByNameContainingIgnoreCase() {
         List<SuperHero> result = superHeroRepository.findByNameContainingIgnoreCase("man");
 
         assertEquals(4, result.size());

@@ -1,9 +1,33 @@
 package com.superhero.unit.controller;
 
+import static com.superhero.constants.OutputMessageConstants.CREATED;
+import static com.superhero.constants.OutputMessageConstants.DELETED;
+import static com.superhero.constants.OutputMessageConstants.MESSAGE_OUTPUT;
+import static com.superhero.constants.OutputMessageConstants.UPDATED;
+import static com.superhero.factory.MockSuperHeroesFactory.getAllSuperHeroes;
+import static com.superhero.factory.MockSuperHeroesFactory.getSuperHero;
+import static com.superhero.factory.MockSuperHeroesFactory.getSuperHeroContains;
+import static com.superhero.factory.MockSuperHeroesFactory.inputUpdatedSuperHero;
+import static com.superhero.factory.MockSuperHeroesFactory.newSuperHero;
+import static com.superhero.utils.JsonConverter.toJson;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.superhero.constants.ExceptionConstants;
+import com.superhero.constants.OutputMessageConstants;
 import com.superhero.controller.SuperHeroController;
+import com.superhero.exception.SuperHeroNotFoundException;
 import com.superhero.factory.MockSuperHeroesFactory;
 import com.superhero.model.SuperHero;
 import com.superhero.services.ISuperHeroService;
@@ -12,6 +36,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -39,7 +64,7 @@ public class SuperHeroControllerTest {
 
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         ObjectMapper objectMapper = new ObjectMapper()
             .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
             .setDateFormat(new SimpleDateFormat("yyyy-MM-dd"))
@@ -53,38 +78,99 @@ public class SuperHeroControllerTest {
     }
 
     @Test
-    public void testGetAllSuperHeroes() throws Exception {
-        Mockito.when(superHeroService.getAllSuperHeroes()).thenReturn(MockSuperHeroesFactory.getAllSuperHeroes());
+    @SneakyThrows
+    void testGetAllSuperHeroes() {
+        when(superHeroService.getAllSuperHeroes()).thenReturn(getAllSuperHeroes());
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/superheroes"))
-            .andExpect(MockMvcResultMatchers.status().isOk())
-            .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
-            .andExpect(MockMvcResultMatchers.content().json(JsonConverter.loadJsonFromFile("heroes.json")));
+        mockMvc.perform(get("/superheroes"))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+            .andExpect(content().json(JsonConverter.loadJsonFromFile("heroes.json")));
     }
 
     @Test
-    public void testGetSuperHeroById() throws Exception {
+    @SneakyThrows
+    void testGetSuperHeroById() {
         Long heroId = 2L;
-        Mockito.when(superHeroService.getSuperHeroById(heroId))
-            .thenReturn(MockSuperHeroesFactory.getSuperHero(heroId).get());
+        when(superHeroService.getSuperHeroById(heroId))
+            .thenReturn(getSuperHero(heroId).get());
 
-       mockMvc.perform(MockMvcRequestBuilders.get("/superheroes/{id}", heroId))
-            .andExpect(MockMvcResultMatchers.status().isOk())
-            .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
-            .andExpect(MockMvcResultMatchers.content().json(JsonConverter.loadJsonFromFile("heroe2.json")));
+       mockMvc.perform(get("/superheroes/{id}", heroId))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+            .andExpect(content().json(JsonConverter.loadJsonFromFile("heroe2.json")));
     }
 
     @Test
-    public void testSearchSuperHeroesByName() throws Exception {
+    @SneakyThrows
+    void testSearchSuperHeroesByName() {
         String searchName = "man";
-        Mockito.when(superHeroService.searchSuperHeroesByName(searchName))
-            .thenReturn(MockSuperHeroesFactory.getSuperHeroContains(searchName));
+        when(superHeroService.searchSuperHeroesByName(searchName))
+            .thenReturn(getSuperHeroContains(searchName));
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/superheroes/search")
+        mockMvc.perform(get("/superheroes/search")
                 .param("name", searchName))
-            .andExpect(MockMvcResultMatchers.status().isOk())
-            .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
-            .andExpect(MockMvcResultMatchers.content().json(JsonConverter.loadJsonFromFile("heroesMan.json")));
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+            .andExpect(content().json(JsonConverter.loadJsonFromFile("heroesMan.json")));
+    }
+
+    @Test
+    @SneakyThrows
+    void testCreateSuperHero() {
+        SuperHero inputSuperHero = newSuperHero();
+
+        when(superHeroService.createSuperHero(inputSuperHero)).thenReturn(inputSuperHero);
+
+        String outputMessage = String.format(MESSAGE_OUTPUT, inputSuperHero.getName(), CREATED);
+
+
+        mockMvc.perform(post("/superheroes")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonConverter.loadJsonFromFile("newHeroe.json")))
+            .andExpect(status().isOk())
+            .andExpect(content().json(toJson(outputMessage)));
+
+        verify(superHeroService).createSuperHero(any());
+    }
+
+    @Test
+    @SneakyThrows
+    void testUpdateSuperHero() {
+        Long heroId = 3L;
+        SuperHero inputSuperHero = inputUpdatedSuperHero();
+        SuperHero toBeUpdatedSuperHero = getSuperHero(heroId).get();
+        toBeUpdatedSuperHero.setDescription("Wonder Woman, also known as Diana Prince, is an iconic superheroine and a founding member of the Justice League");
+
+        when(superHeroService.updateSuperHero(toBeUpdatedSuperHero, heroId)).thenReturn(inputSuperHero);
+
+        String outputMessage = String.format(MESSAGE_OUTPUT, toBeUpdatedSuperHero.getName(), UPDATED);
+        mockMvc.perform(put("/superheroes/{id}", heroId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonConverter.loadJsonFromFile("heroe2.json")))
+            .andExpect(status().isOk())
+            .andExpect(content().json(toJson(outputMessage)));
+
+
+        verify(superHeroService).updateSuperHero(any(), any());
+    }
+
+    @Test
+    @SneakyThrows
+    void testDeleteSuperHero() {
+        Long heroId = 1L;
+        SuperHero deletedSuperHero = getSuperHero(heroId).get();
+
+        when(superHeroService.deleteSuperHero(deletedSuperHero, heroId)).thenReturn(deletedSuperHero);
+
+        String outputMessage = String.format(MESSAGE_OUTPUT, deletedSuperHero.getName(), DELETED);
+
+        mockMvc.perform(delete("/superheroes/{id}", heroId)
+                .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(content().json(toJson(outputMessage)));
+
+        verify(superHeroService).deleteSuperHero(any(), any());
     }
 
 }

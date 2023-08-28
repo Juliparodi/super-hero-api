@@ -42,6 +42,21 @@ public class SuperHeroServiceImpl implements ISuperHeroService {
             ExceptionConstants.SUPER_HEROES_WITH_NAME_NOT_FOUND, name) );
     }
 
+    @Override
+    public SuperHero createSuperHero(SuperHero superHero) {
+        return null;
+    }
+
+    @Override
+    public SuperHero updateSuperHero(SuperHero superHero, long parseLong) {
+        return null;
+    }
+
+    @Override
+    public SuperHero deleteSuperHero(SuperHero superHero, long parseLong) {
+        return null;
+    }
+
     private List<SuperHero> validateAndGetSuperHeroes(List<SuperHero> superHeroes, String message) {
         if (superHeroes.isEmpty()) {
             throw new SuperHeroNotFoundException(message);

@@ -28,4 +28,30 @@ public class MockSuperHeroesFactory {
             .filter(superHero -> superHero.getName().toLowerCase().contains(searchName))
             .collect(Collectors.toList());
     }
+
+    public static SuperHero newSuperHero() {
+        return SuperHero.builder()
+            .name("Aqua Dynamo")
+            .description("Master of the Abyss")
+            .birthDate(LocalDate.parse("1938-04-18"))
+            .build();
+    }
+
+    public static SuperHero inputUpdatedSuperHero() {
+        return SuperHero.builder()
+            .name("Wonder Woman")
+            .description("Wonder Woman, also known as Diana Prince, is an iconic superheroine and a founding member of the Justice League")
+            .birthDate(LocalDate.parse("1941-12-01"))
+            .build();
+    }
+
+    public static SuperHero createNewSuperHeroe(SuperHero superHero) {
+        return SuperHero.builder()
+            .name(superHero.getName())
+            .description(superHero.getDescription())
+            .birthDate(superHero.getBirthDate())
+            .creationDate(LocalDate.now())
+            .modifiedDate(LocalDate.now())
+            .build();
+    }
 }
