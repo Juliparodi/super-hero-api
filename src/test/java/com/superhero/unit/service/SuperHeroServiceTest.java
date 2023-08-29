@@ -1,7 +1,7 @@
 package com.superhero.unit.service;
 
 import static com.superhero.factory.MockSuperHeroesFactory.createNewSuperHeroe;
-import static com.superhero.factory.MockSuperHeroesFactory.getAllSuperHeroes;
+import static com.superhero.factory.MockSuperHeroesFactory.getAllSuperHeroesWithIdAndDates;
 import static com.superhero.factory.MockSuperHeroesFactory.getSuperHero;
 import static com.superhero.factory.MockSuperHeroesFactory.getSuperHeroContains;
 import static com.superhero.factory.MockSuperHeroesFactory.inputUpdatedSuperHero;
@@ -42,7 +42,7 @@ public class SuperHeroServiceTest {
 
     @Test
     void testGetAllSuperHeroes() {
-        List<SuperHero> mockSuperHeroes = getAllSuperHeroes();
+        List<SuperHero> mockSuperHeroes = getAllSuperHeroesWithIdAndDates();
 
         given(superHeroRepository.findAll()).willReturn(mockSuperHeroes);
 
@@ -50,7 +50,7 @@ public class SuperHeroServiceTest {
 
         assertNotNull(result);
         assertEquals(4, result.size());
-        assertEquals("Batman", result.get(3).getName());
+        assertEquals("Green Lantern", result.get(3).getName());
     }
 
     @Test

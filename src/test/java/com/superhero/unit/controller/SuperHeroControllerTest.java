@@ -4,14 +4,13 @@ import static com.superhero.constants.OutputMessageConstants.CREATED;
 import static com.superhero.constants.OutputMessageConstants.DELETED;
 import static com.superhero.constants.OutputMessageConstants.MESSAGE_OUTPUT;
 import static com.superhero.constants.OutputMessageConstants.UPDATED;
-import static com.superhero.factory.MockSuperHeroesFactory.getAllSuperHeroes;
+import static com.superhero.factory.MockSuperHeroesFactory.getAllSuperHeroesWithIdAndDates;
 import static com.superhero.factory.MockSuperHeroesFactory.getSuperHero;
 import static com.superhero.factory.MockSuperHeroesFactory.getSuperHeroContains;
 import static com.superhero.factory.MockSuperHeroesFactory.inputUpdatedSuperHero;
 import static com.superhero.factory.MockSuperHeroesFactory.newSuperHero;
 import static com.superhero.utils.JsonConverter.toJson;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -40,7 +39,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 @SpringBootTest
@@ -71,7 +69,7 @@ public class SuperHeroControllerTest {
     @Test
     @SneakyThrows
     void testGetAllSuperHeroes() {
-        when(superHeroService.getAllSuperHeroes()).thenReturn(getAllSuperHeroes());
+        when(superHeroService.getAllSuperHeroes()).thenReturn(getAllSuperHeroesWithIdAndDates());
 
         mockMvc.perform(get("/superheroes"))
             .andExpect(status().isOk())
@@ -103,7 +101,7 @@ public class SuperHeroControllerTest {
                 .param("name", searchName))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-            .andExpect(content().json(JsonConverter.loadJsonFromFile("heroesMan.json")));
+            .andExpect(content().json(JsonConverter.loadJsonFromFile("heroes-man.json")));
     }
 
     @Test
@@ -115,13 +113,11 @@ public class SuperHeroControllerTest {
 
         String outputMessage = String.format(MESSAGE_OUTPUT, inputSuperHero.getId(), CREATED);
 
-       ResultActions resultActions =mockMvc.perform(post("/superheroes/hero")
+       mockMvc.perform(post("/superheroes/hero")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(JsonConverter.loadJsonFromFile("newHeroe.json")));
-
-       resultActions
-            .andExpect(status().isOk())
-            .andExpect(content().json(toJson(outputMessage)));
+                .content(JsonConverter.loadJsonFromFile("new-heroe.json")))
+                .andExpect(status().isOk())
+                .andExpect(content().json(toJson(outputMessage)));
 
         verify(superHeroService).createSuperHero(any());
     }
@@ -138,13 +134,11 @@ public class SuperHeroControllerTest {
 
         String outputMessage = String.format(MESSAGE_OUTPUT, toBeUpdatedSuperHero.getId(), UPDATED);
 
-        ResultActions resultActions = mockMvc.perform(put("/superheroes/hero/{id}", heroId)
+        mockMvc.perform(put("/superheroes/hero/{id}", heroId)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(JsonConverter.loadJsonFromFile("heroe3.json")));
-
-        resultActions
-            .andExpect(status().isOk())
-            .andExpect(content().json(toJson(outputMessage)));
+                .content(JsonConverter.loadJsonFromFile("heroe3.json")))
+                .andExpect(status().isOk())
+                .andExpect(content().json(toJson(outputMessage)));
 
 
         verify(superHeroService).updateSuperHero(any(), anyLong());
