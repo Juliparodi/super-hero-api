@@ -61,14 +61,10 @@ public class SuperHeroServiceImpl implements ISuperHeroService {
     }
 
     @Override
-    public SuperHero deleteSuperHero(long id) {
-
+    public void deleteSuperHero(long id) {
         SuperHero superHeroFound = findById(id);
 
         superHeroRepository.deleteById(id);
-
-        return superHeroFound;
-
     }
 
     private SuperHero findById(long id) {

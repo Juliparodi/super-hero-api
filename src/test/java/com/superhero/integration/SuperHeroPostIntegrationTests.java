@@ -1,19 +1,18 @@
 package com.superhero.integration;
 
 import static com.superhero.constants.OutputMessageConstants.CREATED;
-import static com.superhero.constants.OutputMessageConstants.DELETED;
 import static com.superhero.constants.OutputMessageConstants.MESSAGE_OUTPUT;
-import static com.superhero.constants.OutputMessageConstants.UPDATED;
-import static com.superhero.factory.MockSuperHeroesFactory.getAllSuperHeroes;
-import static com.superhero.factory.MockSuperHeroesFactory.getSuperHero;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static com.superhero.constants.SecurityConstants.BEARER;
+import static com.superhero.constants.SecurityConstants.JWT_HEADER;
+import static com.superhero.factory.AuthenticationFactory.createAuthRoleAdmin;
+import static com.superhero.factory.AuthenticationFactory.createAuthRoleRead;
+import static com.superhero.factory.SuperHeroesFactory.getAllSuperHeroes;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.superhero.model.SuperHero;
 import com.superhero.repository.SuperHeroRepository;
+import com.superhero.utils.AuthenticationUtil;
 import com.superhero.utils.JsonConverter;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.AfterEach;
@@ -39,6 +38,9 @@ public class SuperHeroPostIntegrationTests {
     @Autowired
     private SuperHeroRepository superHeroRepository;
 
+    @Autowired
+    private AuthenticationUtil authenticationUtil;
+
     @BeforeEach
     public void setUp() {
         superHeroRepository.saveAll(getAllSuperHeroes());
@@ -55,6 +57,7 @@ public class SuperHeroPostIntegrationTests {
     public void whenCreateNewSuperHero_ThenReturnOKWithCongratsMessage() {
         String outputMessage = String.format(MESSAGE_OUTPUT, 5, CREATED);
         mockMvc.perform(post("/superheroes/hero")
+                .header(JWT_HEADER, BEARER + authenticationUtil.createToken(createAuthRoleAdmin()))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonConverter.loadJsonFromFile("new-heroe.json")))
             .andExpect(status().isOk())
@@ -65,9 +68,31 @@ public class SuperHeroPostIntegrationTests {
     @SneakyThrows
     public void whenCreateNewSuperHeroWithNameNull_ThenReturn400BadRequest() {
         mockMvc.perform(post("/superheroes/hero")
+                .header(JWT_HEADER, BEARER + authenticationUtil.createToken(createAuthRoleAdmin()))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonConverter.loadJsonFromFile("new-heroe-null-name.json")))
             .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @SneakyThrows
+    public void whenCreateNewSuperHeroWithoutTokenHeader_ThenReturn401() {
+
+        mockMvc.perform(post("/superheroes/hero")
+                .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isUnauthorized());
+
+    }
+
+    @Test
+    @SneakyThrows
+    public void whenCreateNewSuperHeroWithAUserWithUserRole_ThenReturn401() {
+
+        mockMvc.perform(post("/superheroes/hero")
+                .header(JWT_HEADER, BEARER + authenticationUtil.createToken(createAuthRoleRead()))
+                .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isForbidden());
+
     }
 
 

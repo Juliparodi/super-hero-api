@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class MockSuperHeroesFactory {
+public class SuperHeroesFactory {
 
     public static List<SuperHero> getAllSuperHeroesWithIdAndDates() {
         return List.of(

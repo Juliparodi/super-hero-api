@@ -4,11 +4,11 @@ import static com.superhero.constants.OutputMessageConstants.CREATED;
 import static com.superhero.constants.OutputMessageConstants.DELETED;
 import static com.superhero.constants.OutputMessageConstants.MESSAGE_OUTPUT;
 import static com.superhero.constants.OutputMessageConstants.UPDATED;
-import static com.superhero.factory.MockSuperHeroesFactory.getAllSuperHeroesWithIdAndDates;
-import static com.superhero.factory.MockSuperHeroesFactory.getSuperHero;
-import static com.superhero.factory.MockSuperHeroesFactory.getSuperHeroContains;
-import static com.superhero.factory.MockSuperHeroesFactory.inputUpdatedSuperHero;
-import static com.superhero.factory.MockSuperHeroesFactory.newSuperHero;
+import static com.superhero.factory.SuperHeroesFactory.getAllSuperHeroesWithIdAndDates;
+import static com.superhero.factory.SuperHeroesFactory.getSuperHero;
+import static com.superhero.factory.SuperHeroesFactory.getSuperHeroContains;
+import static com.superhero.factory.SuperHeroesFactory.inputUpdatedSuperHero;
+import static com.superhero.factory.SuperHeroesFactory.newSuperHero;
 import static com.superhero.utils.JsonConverter.toJson;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -149,8 +149,6 @@ public class SuperHeroControllerTest {
     void testDeleteSuperHero() {
         Long heroId = 1L;
         SuperHero deletedSuperHero = getSuperHero(heroId).get();
-
-        when(superHeroService.deleteSuperHero(anyLong())).thenReturn(deletedSuperHero);
 
         String outputMessage = String.format(MESSAGE_OUTPUT, deletedSuperHero.getId(), DELETED);
 

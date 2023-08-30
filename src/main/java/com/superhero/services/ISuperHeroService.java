@@ -12,8 +12,9 @@ public interface ISuperHeroService {
     List<SuperHero> searchSuperHeroesByName(String name);
 
     SuperHero createSuperHero(SuperHero superHero);
+
     SuperHero updateSuperHero(SuperHero superHero, long parseLong);
 
-    SuperHero deleteSuperHero(long parseLong);
+    void deleteSuperHero(long parseLong);
 
 }

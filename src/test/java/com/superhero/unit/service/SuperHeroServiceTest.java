@@ -1,11 +1,11 @@
 package com.superhero.unit.service;
 
-import static com.superhero.factory.MockSuperHeroesFactory.createNewSuperHeroe;
-import static com.superhero.factory.MockSuperHeroesFactory.getAllSuperHeroesWithIdAndDates;
-import static com.superhero.factory.MockSuperHeroesFactory.getSuperHero;
-import static com.superhero.factory.MockSuperHeroesFactory.getSuperHeroContains;
-import static com.superhero.factory.MockSuperHeroesFactory.inputUpdatedSuperHero;
-import static com.superhero.factory.MockSuperHeroesFactory.newSuperHero;
+import static com.superhero.factory.SuperHeroesFactory.createNewSuperHeroe;
+import static com.superhero.factory.SuperHeroesFactory.getAllSuperHeroesWithIdAndDates;
+import static com.superhero.factory.SuperHeroesFactory.getSuperHero;
+import static com.superhero.factory.SuperHeroesFactory.getSuperHeroContains;
+import static com.superhero.factory.SuperHeroesFactory.inputUpdatedSuperHero;
+import static com.superhero.factory.SuperHeroesFactory.newSuperHero;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -124,14 +124,13 @@ public class SuperHeroServiceTest {
         SuperHero inputSuperHero = inputUpdatedSuperHero();
         SuperHero foundSuperHero = getSuperHero(heroId).get();
         foundSuperHero.setDescription("Superman possesses immense strength, enabling him to lift enormous objects and face formidable foes.");
-        SuperHero updatedSuperHero = foundSuperHero;
 
         given(superHeroRepository.findById(heroId)).willReturn(Optional.of(foundSuperHero));
-        given(superHeroRepository.save(any())).willReturn(updatedSuperHero);
+        given(superHeroRepository.save(any())).willReturn(foundSuperHero);
 
         SuperHero result = superHeroService.updateSuperHero(inputSuperHero, heroId);
 
-        assertEquals(updatedSuperHero, result);
+        assertEquals(foundSuperHero, result);
     }
 
     @Test
@@ -141,7 +140,7 @@ public class SuperHeroServiceTest {
 
         given(superHeroRepository.findById(heroId)).willReturn(Optional.of(superHeroToDelete));
 
-        SuperHero result = superHeroService.deleteSuperHero(heroId);
+        superHeroService.deleteSuperHero(heroId);
 
         verify(superHeroRepository, times(1)).deleteById(heroId);
     }
