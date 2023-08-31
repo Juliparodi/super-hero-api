@@ -1,4 +1,4 @@
-package com.superhero.config;
+package com.superhero.config.security;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

@@ -1,4 +1,4 @@
-package com.superhero.config.filters;
+package com.superhero.config.security.filters;
 
 import static com.superhero.constants.ExceptionConstants.TOKEN;
 

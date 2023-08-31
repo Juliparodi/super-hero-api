@@ -1,4 +1,4 @@
-package com.superhero.config.filters;
+package com.superhero.config.security.filters;
 
 import static com.superhero.constants.ExceptionConstants.INVALID_TOKEN;
 import static com.superhero.constants.SecurityConstants.JWT_HEADER;
@@ -41,7 +41,9 @@ public class JwtTokenValidationFilter extends OncePerRequestFilter {
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
-        return "/login".equals(request.getRequestURI());
+        String url = request.getRequestURI();
+        return "/login".equals(url)
+            || "/swagger-ui/index.html".equalsIgnoreCase(url);
     }
 
 

@@ -1,4 +1,4 @@
-package com.superhero.config;
+package com.superhero.config.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
