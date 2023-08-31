@@ -8,6 +8,7 @@ import static com.superhero.constants.OutputMessageConstants.UPDATED;
 import static com.superhero.utils.ValidationUtils.validateString;
 import static com.superhero.utils.ValidationUtils.validateStringConvertToLong;
 
+import com.superhero.annotations.ExecutionTimeLog;
 import com.superhero.model.SuperHero;
 import com.superhero.services.ISuperHeroService;
 import jakarta.validation.Valid;
@@ -40,12 +41,14 @@ public class SuperHeroController {
         this.superHeroService = superHeroService;
     }
 
+    @ExecutionTimeLog
     @GetMapping
     public ResponseEntity<List<SuperHero>> getAllSuperHeroes() {
         List<SuperHero> allSuperHeroes = superHeroService.getAllSuperHeroes();
         return ResponseEntity.ok(allSuperHeroes);
     }
 
+    @ExecutionTimeLog
     @GetMapping("/{id}")
     public ResponseEntity<SuperHero> getSuperHeroById(@PathVariable String id) {
         Long heroId = validateStringConvertToLong(id);
@@ -53,6 +56,7 @@ public class SuperHeroController {
         return ResponseEntity.ok(superHero);
     }
 
+    @ExecutionTimeLog
     @GetMapping("/search")
     public ResponseEntity<List<SuperHero>> searchSuperHeroesByName(@RequestParam String name) {
         validateString(name);
@@ -60,12 +64,14 @@ public class SuperHeroController {
         return ResponseEntity.ok(matchingSuperHeroes);
     }
 
+    @ExecutionTimeLog
     @PostMapping("/hero")
     public ResponseEntity<String> createSuperHero(@RequestBody @Valid SuperHero superHero) {
         SuperHero superHeroCreated = superHeroService.createSuperHero(superHero);
         return ResponseEntity.ok(String.format(MESSAGE_OUTPUT, superHeroCreated.getId(), CREATED));
     }
 
+    @ExecutionTimeLog
     @PutMapping("/hero/{id}")
     public ResponseEntity<String> updateSuperHero(@RequestBody @Valid SuperHero superHero, @PathVariable String id) {
         Long heroId = validateStringConvertToLong(id);
@@ -73,6 +79,7 @@ public class SuperHeroController {
         return ResponseEntity.ok(String.format(MESSAGE_OUTPUT, superHeroUpdated.getId(), UPDATED));
     }
 
+    @ExecutionTimeLog
     @DeleteMapping("/hero/{id}")
     public ResponseEntity<String> deleteSuperHero(@PathVariable String id) {
         Long heroId = validateStringConvertToLong(id);
