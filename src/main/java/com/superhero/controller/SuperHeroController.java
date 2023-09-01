@@ -8,6 +8,7 @@ import static com.superhero.constants.OutputMessageConstants.UPDATED;
 import static com.superhero.utils.ValidationUtils.validateString;
 import static com.superhero.utils.ValidationUtils.validateStringConvertToLong;
 
+import com.superhero.annotations.CommonApiResponses;
 import com.superhero.annotations.ExecutionTimeLog;
 import com.superhero.model.SuperHero;
 import com.superhero.services.ISuperHeroService;
@@ -50,10 +51,7 @@ public class SuperHeroController {
 
     @Operation(description = "Retrieve all super heroes")
     @ApiResponse(responseCode = "200", description = "Super Heroes found")
-    @ApiResponse(responseCode = "401", description = "Unauthorized")
-    @ApiResponse(responseCode = "403", description = "Access denied")
-    @ApiResponse(responseCode = "404", description = "Super heroes not found")
-    @ApiResponse(responseCode = "500", description = "Internal Server Error")
+    @CommonApiResponses
     @ExecutionTimeLog
     @GetMapping
     public ResponseEntity<List<SuperHero>> getAllSuperHeroes() {
@@ -63,11 +61,7 @@ public class SuperHeroController {
 
     @Operation(description = "Retrieve super hero by id")
     @ApiResponse(responseCode = "200", description = "Super Heroes with given id found")
-    @ApiResponse(responseCode = "400", description = "Some parameters are invalid")
-    @ApiResponse(responseCode = "401", description = "Invalid or empty token")
-    @ApiResponse(responseCode = "403", description = "Access denied")
-    @ApiResponse(responseCode = "404", description = "Super heroes not found")
-    @ApiResponse(responseCode = "500", description = "Internal Server Error")
+    @CommonApiResponses
     @ExecutionTimeLog
     @GetMapping("/{id}")
     public ResponseEntity<SuperHero> getSuperHeroById(@PathVariable String id) {
@@ -78,12 +72,7 @@ public class SuperHeroController {
 
     @Operation(description = "Retrieve all super heroes that matches given text")
     @ApiResponse(responseCode = "200", description = "Super Heroes with matching text shown")
-    @ApiResponse(responseCode = "400", description = "Some parameters are invalid")
-    @ApiResponse(responseCode = "401", description = "Invalid or empty token")
-    @ApiResponse(responseCode = "401", description = "Unauthorized")
-    @ApiResponse(responseCode = "403", description = "Access denied")
-    @ApiResponse(responseCode = "404", description = "Super heroes not found")
-    @ApiResponse(responseCode = "500", description = "Internal Server Error")
+    @CommonApiResponses
     @ExecutionTimeLog
     @GetMapping("/search")
     public ResponseEntity<List<SuperHero>> searchSuperHeroesByName(@RequestParam String name) {
@@ -94,10 +83,7 @@ public class SuperHeroController {
 
     @Operation(description = "Creates new super hero")
     @ApiResponse(responseCode = "200", description = "Super Heroes created")
-    @ApiResponse(responseCode = "400", description = "Some parameters are invalid")
-    @ApiResponse(responseCode = "401", description = "Invalid or empty token")
-    @ApiResponse(responseCode = "403", description = "Access denied")
-    @ApiResponse(responseCode = "500", description = "Internal Server Error")
+    @CommonApiResponses
     @ExecutionTimeLog
     @PostMapping("/hero")
     public ResponseEntity<String> createSuperHero(@RequestBody @Valid SuperHero superHero) {
@@ -107,11 +93,7 @@ public class SuperHeroController {
 
     @Operation(description = "Update user by ID")
     @ApiResponse(responseCode = "200", description = "Super Hero with given id successfully updated")
-    @ApiResponse(responseCode = "400", description = "Some parameters are invalid")
-    @ApiResponse(responseCode = "401", description = "Invalid or empty token")
-    @ApiResponse(responseCode = "403", description = "Access denied")
-    @ApiResponse(responseCode = "404", description = "Super heroes not found")
-    @ApiResponse(responseCode = "500", description = "Internal Server Error")
+    @CommonApiResponses
     @ExecutionTimeLog
     @PutMapping("/hero/{id}")
     public ResponseEntity<String> updateSuperHero(@RequestBody @Valid SuperHero superHero, @PathVariable String id) {
@@ -122,11 +104,7 @@ public class SuperHeroController {
 
     @Operation(description = "Delete user by ID")
     @ApiResponse(responseCode = "200", description = "Super Hero with given id successfully deleted")
-    @ApiResponse(responseCode = "400", description = "Some parameters are invalid")
-    @ApiResponse(responseCode = "401", description = "Invalid or empty token")
-    @ApiResponse(responseCode = "403", description = "Access denied")
-    @ApiResponse(responseCode = "404", description = "Super heroes not found")
-    @ApiResponse(responseCode = "500", description = "Internal Server Error")
+    @CommonApiResponses
     @ExecutionTimeLog
     @DeleteMapping("/hero/{id}")
     public ResponseEntity<String> deleteSuperHero(@PathVariable String id) {
