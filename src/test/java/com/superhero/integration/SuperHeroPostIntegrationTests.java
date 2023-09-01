@@ -55,7 +55,7 @@ public class SuperHeroPostIntegrationTests {
     @Test
     @SneakyThrows
     public void whenCreateNewSuperHero_ThenReturnOKWithCongratsMessage() {
-        String outputMessage = String.format(MESSAGE_OUTPUT, 5, CREATED);
+        String outputMessage = String.format(MESSAGE_OUTPUT, 8, CREATED);
         mockMvc.perform(post("/superheroes/hero")
                 .header(JWT_HEADER, BEARER + authenticationUtil.createToken(createAuthRoleAdmin()))
                 .contentType(MediaType.APPLICATION_JSON)

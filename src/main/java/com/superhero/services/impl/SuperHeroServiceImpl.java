@@ -6,9 +6,15 @@ import com.superhero.model.SuperHero;
 import com.superhero.repository.SuperHeroRepository;
 import com.superhero.services.ISuperHeroService;
 import java.util.List;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+@Log4j2
 @Service
 public class SuperHeroServiceImpl implements ISuperHeroService {
 
@@ -19,19 +25,22 @@ public class SuperHeroServiceImpl implements ISuperHeroService {
         this.superHeroRepository = superHeroRepository;
     }
 
+
+    @Cacheable("getAllSuperHeroesCache")
     @Override
     public List<SuperHero> getAllSuperHeroes() {
         List<SuperHero> superHeroes = superHeroRepository.findAll();
-
         return validateAndGetSuperHeroes(superHeroes, ExceptionConstants.SUPER_HEROES_NOT_FOUND);
     }
 
+    @Cacheable(value = "superHeroByIdCache", key = "#id")
     @Override
     public SuperHero getSuperHeroById(Long id) {
         return findById(id);
     }
 
     @Override
+    @Cacheable(value = "searchSuperHeroesByTextCache", key = "#name")
     public List<SuperHero> searchSuperHeroesByName(String name) {
         List<SuperHero> superHeroes = superHeroRepository.findByNameContainingIgnoreCase(name);
 
@@ -39,11 +48,13 @@ public class SuperHeroServiceImpl implements ISuperHeroService {
             ExceptionConstants.SUPER_HEROES_WITH_NAME_NOT_FOUND, name) );
     }
 
+    @CacheEvict(value = {"getAllSuperHeroesCache", "searchSuperHeroesByTextCache"}, allEntries = true)
     @Override
     public SuperHero createSuperHero(SuperHero superHero) {
         return superHeroRepository.save(superHero);
     }
 
+    @CacheEvict(value = {"superHeroByIdCache", "getAllSuperHeroesCache", "searchSuperHeroesByTextCache"}, key = "#id")
     @Override
     public SuperHero updateSuperHero(SuperHero inputSuperHero, long id) {
 
@@ -60,11 +71,10 @@ public class SuperHeroServiceImpl implements ISuperHeroService {
         return superHeroRepository.save(superHeroUpdated);
     }
 
+    @CacheEvict(value = {"superHeroByIdCache", "getAllSuperHeroesCache", "searchSuperHeroesByTextCache"}, key = "#id")
     @Override
     public void deleteSuperHero(long id) {
-        SuperHero superHeroFound = findById(id);
-
-        superHeroRepository.deleteById(id);
+        superHeroRepository.deleteById(findById(id).getId());
     }
 
     private SuperHero findById(long id) {

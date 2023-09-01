@@ -57,7 +57,7 @@ public class SuperHeroGetIntegrationTests {
             .andExpect(MockMvcResultMatchers.status().isOk())
             .andExpect(MockMvcResultMatchers.content().contentType("application/json"))
             .andExpect(MockMvcResultMatchers.jsonPath("$").isArray())
-            .andExpect(MockMvcResultMatchers.jsonPath("$.length()").value(4))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.length()").value(7))
             .andExpect(MockMvcResultMatchers.jsonPath("$[1].name").value("Spider-Man"))
             .andExpect(MockMvcResultMatchers.jsonPath("$[3].description").value("Guardian of Sector 2814 with a power ring"));
 

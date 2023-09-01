@@ -1,0 +1,2 @@
+ALTER TABLE super_hero
+ALTER COLUMN name VARCHAR(110);

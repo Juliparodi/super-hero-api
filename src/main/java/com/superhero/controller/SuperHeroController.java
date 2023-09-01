@@ -1,6 +1,5 @@
 package com.superhero.controller;
 
-import static com.superhero.constants.ExceptionConstants.VALIDATE_PARAMS_NOT_EMPTY;
 import static com.superhero.constants.OutputMessageConstants.CREATED;
 import static com.superhero.constants.OutputMessageConstants.DELETED;
 import static com.superhero.constants.OutputMessageConstants.MESSAGE_OUTPUT;
@@ -13,18 +12,14 @@ import com.superhero.annotations.ExecutionTimeLog;
 import com.superhero.model.SuperHero;
 import com.superhero.services.ISuperHeroService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.ExampleObject;
-import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -75,7 +70,7 @@ public class SuperHeroController {
     @CommonApiResponses
     @ExecutionTimeLog
     @GetMapping("/search")
-    public ResponseEntity<List<SuperHero>> searchSuperHeroesByName(@RequestParam String name) {
+    public ResponseEntity<List<SuperHero>> searchSuperHeroesByText(@RequestParam String name) {
         validateString(name);
         List<SuperHero> matchingSuperHeroes = superHeroService.searchSuperHeroesByName(name);
         return ResponseEntity.ok(matchingSuperHeroes);
