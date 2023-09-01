@@ -1,6 +1,7 @@
 package com.superhero.config.security.filters;
 
 import static com.superhero.constants.ExceptionConstants.TOKEN;
+import static com.superhero.constants.SecurityConstants.BEARER;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.superhero.utils.JwtUtilsWrapper;
@@ -10,6 +11,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Collections;
+import java.util.Map;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -49,7 +51,10 @@ public class CustomJwtAuthenticationFilter extends UsernamePasswordAuthenticatio
             response.setStatus(HttpServletResponse.SC_OK);
             response.setContentType("application/json");
             response.getWriter().write(objectMapper.writeValueAsString(
-                Collections.singletonMap("token", String.format(TOKEN, jwt))
+                Map.of(
+                    "token", jwt,
+                    "type", BEARER
+                )
             ));
             response.getWriter().flush();
         }

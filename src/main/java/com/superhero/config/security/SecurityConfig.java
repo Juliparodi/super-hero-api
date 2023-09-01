@@ -55,17 +55,10 @@ public class SecurityConfig {
         return authenticationConfiguration.getAuthenticationManager();
     }
 
-    @Bean
-    public AuthenticationEntryPoint authenticationEntryPoint() {
-        return new CustomAuthenticationEntryPoint();
-    }
-
 
     @Bean
     SecurityFilterChain defaultSecurityFilterChain(
         HttpSecurity http, HandlerMappingIntrospector introspector) throws Exception {
-
-        MvcRequestMatcher.Builder mvcMatcherBuilder = new MvcRequestMatcher.Builder(introspector);
 
         http
             .sessionManagement(sessionManagement ->
@@ -76,8 +69,10 @@ public class SecurityConfig {
             .authorizeHttpRequests(requests->requests
                 .requestMatchers(AntPathRequestMatcher.antMatcher("/swagger-ui/**")).permitAll()
                 .requestMatchers(AntPathRequestMatcher.antMatcher("/swagger-ui/swagger-ui.html/**")).permitAll()
+                .requestMatchers(AntPathRequestMatcher.antMatcher("/swagger-ui/swagger-ui.html#/**")).permitAll()
                 .requestMatchers(AntPathRequestMatcher.antMatcher("/v3/api-docs/**")).permitAll()
                 .requestMatchers(AntPathRequestMatcher.antMatcher("/swagger-ui.html")).permitAll()
+                .requestMatchers(AntPathRequestMatcher.antMatcher("/swagger-ui.html#")).permitAll()
                 .requestMatchers(AntPathRequestMatcher.antMatcher( "/h2-console/**")).permitAll()
                 .requestMatchers(AntPathRequestMatcher.antMatcher((HttpMethod.GET), "/superheroes")).hasAnyRole(ROLE_ADMIN, ROLE_READ)
                 .requestMatchers(AntPathRequestMatcher.antMatcher((HttpMethod.GET), "/search/**")).hasAnyRole(ROLE_ADMIN, ROLE_READ)
@@ -86,10 +81,9 @@ public class SecurityConfig {
                 .requestMatchers(AntPathRequestMatcher.antMatcher((HttpMethod.PUT), "/superheroes/hero/**")).hasRole(ROLE_ADMIN)
                 .requestMatchers(AntPathRequestMatcher.antMatcher((HttpMethod.DELETE), "/superheroes/hero/**")).hasRole(ROLE_ADMIN)
                 .anyRequest().authenticated())
-           //.addFilterBefore(new JwtTokenValidationFilter(jwtUtils), UsernamePasswordAuthenticationFilter.class)
-            //.addFilterBefore(new CustomJwtAuthenticationFilter(authenticationManager(), jwtUtils), UsernamePasswordAuthenticationFilter.class)
-            .formLogin(Customizer.withDefaults())
-            .httpBasic(Customizer.withDefaults());
+            .addFilterBefore(new JwtTokenValidationFilter(jwtUtils), UsernamePasswordAuthenticationFilter.class)
+            .addFilterBefore(new CustomJwtAuthenticationFilter(authenticationManager(), jwtUtils), UsernamePasswordAuthenticationFilter.class)
+            .formLogin(Customizer.withDefaults());
         return http.build();
     }
 
