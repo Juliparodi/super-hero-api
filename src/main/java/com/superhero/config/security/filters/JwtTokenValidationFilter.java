@@ -26,26 +26,23 @@ public class JwtTokenValidationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-        throws IOException, ServletException {
+        throws IOException {
         String jwt = request.getHeader(JWT_HEADER);
 
         if (jwt != null) {
-            try {
-                if (jwt.startsWith("Bearer ")) {
+            if (jwt.startsWith("Bearer ")) {
+                try {
                     jwtUtils.validateAndSetAuthentication(jwt);
-                } else {
+                    filterChain.doFilter(request, response);
+                } catch (Exception e) {
                     addingInvalidTokenResponse(response, jwt);
                 }
-            }  catch (Exception e) {
+            } else {
                 addingInvalidTokenResponse(response, jwt);
-                return;
             }
         } else {
             addingNoTokenResponse(response);
-            return;
         }
-
-        filterChain.doFilter(request, response);
 
     }
 

@@ -43,22 +43,23 @@ public class CustomJwtAuthenticationFilter extends UsernamePasswordAuthenticatio
 
         if (null != authResult) {
             String jwt = jwtUtils.createToken(authResult);
-
             response.setHeader(SecurityConstants.JWT_HEADER, jwt);
-            log.info("Generated token: " + jwt);
-
-            objectMapper = new ObjectMapper();
-            response.setStatus(HttpServletResponse.SC_OK);
-            response.setContentType("application/json");
-            response.getWriter().write(objectMapper.writeValueAsString(
-                Map.of(
-                    "token", jwt,
-                    "type", BEARER
-                )
-            ));
-            response.getWriter().flush();
+            writeResponse(response, jwt);
         }
 
+    }
+
+    private void writeResponse(HttpServletResponse response, String jwt) throws IOException {
+        objectMapper = new ObjectMapper();
+        response.setStatus(HttpServletResponse.SC_OK);
+        response.setContentType("application/json");
+        response.getWriter().write(objectMapper.writeValueAsString(
+            Map.of(
+                "token", jwt,
+                "type", BEARER
+            )
+        ));
+        response.getWriter().flush();
     }
 
 }

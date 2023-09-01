@@ -15,7 +15,7 @@ public class AuthenticationFactory {
     public static Authentication createAuthRoleRead() {
         Collection<? extends GrantedAuthority> authorities = Collections.singletonList(new SimpleGrantedAuthority("ROLE_read"));
         return new UsernamePasswordAuthenticationToken(
-            new User("endUser", "user123", authorities),
+            new User("user", "user123", authorities),
             null,
             authorities
         );

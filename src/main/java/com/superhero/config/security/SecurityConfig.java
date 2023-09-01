@@ -96,7 +96,7 @@ public class SecurityConfig {
             .roles("admin")
             .build();
 
-        UserDetails endUser = User.withUsername("endUser")
+        UserDetails endUser = User.withUsername("user")
             .password(passwordEncoder.encode(endUserPassword))
             .roles("read")
             .build();
