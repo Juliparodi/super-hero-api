@@ -93,6 +93,7 @@
 	</dependencies>
 
 	<build>
+		<finalName>superhero</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
@@ -106,7 +107,6 @@
 				</executions>
 			</plugin>
 		</plugins>
-		<finalName>super-hero-api</finalName>
 	</build>
 
 </project>
