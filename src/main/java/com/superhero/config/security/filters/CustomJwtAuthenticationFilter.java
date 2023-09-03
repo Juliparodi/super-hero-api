@@ -1,6 +1,5 @@
 package com.superhero.config.security.filters;
 
-import static com.superhero.constants.ExceptionConstants.TOKEN;
 import static com.superhero.constants.SecurityConstants.BEARER;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -10,7 +9,6 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Collections;
 import java.util.Map;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;

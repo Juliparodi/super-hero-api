@@ -5,7 +5,6 @@ import static com.superhero.constants.SecurityConstants.JWT_HEADER;
 import static com.superhero.factory.AuthenticationFactory.createAuthRoleRead;
 import static com.superhero.factory.SuperHeroesFactory.getAllSuperHeroes;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.superhero.repository.SuperHeroRepository;

@@ -38,9 +38,6 @@ public class OpenApiConfig {
         return contact;
     }
 
-
-
-
 }
 
 

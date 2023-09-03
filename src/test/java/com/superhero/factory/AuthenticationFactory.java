@@ -1,7 +1,5 @@
 package com.superhero.factory;
 
-
-import com.superhero.utils.JwtUtils;
 import java.util.Collection;
 import java.util.Collections;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

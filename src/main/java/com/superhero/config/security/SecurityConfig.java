@@ -23,10 +23,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
-import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.servlet.util.matcher.MvcRequestMatcher;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 
@@ -58,7 +56,7 @@ public class SecurityConfig {
 
     @Bean
     SecurityFilterChain defaultSecurityFilterChain(
-        HttpSecurity http, HandlerMappingIntrospector introspector) throws Exception {
+        HttpSecurity http) throws Exception {
 
         http
             .sessionManagement(sessionManagement ->

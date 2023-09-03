@@ -8,7 +8,6 @@ import static com.superhero.factory.AuthenticationFactory.createAuthRoleAdmin;
 import static com.superhero.factory.AuthenticationFactory.createAuthRoleRead;
 import static com.superhero.factory.SuperHeroesFactory.getAllSuperHeroes;
 import static com.superhero.factory.SuperHeroesFactory.getSuperHero;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;

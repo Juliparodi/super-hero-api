@@ -4,15 +4,11 @@ import static com.superhero.constants.ExceptionConstants.INVALID_TOKEN;
 import static com.superhero.constants.ExceptionConstants.UNAUTHORIZED_CALL;
 import static com.superhero.constants.SecurityConstants.JWT_HEADER;
 
-import com.superhero.exception.NoTokenException;
 import com.superhero.utils.JwtUtilsWrapper;
 import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 

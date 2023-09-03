@@ -15,10 +15,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.superhero.model.SuperHero;
 import com.superhero.repository.SuperHeroRepository;
 import com.superhero.utils.AuthenticationUtil;
-import com.superhero.utils.JwtUtilsWrapper;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

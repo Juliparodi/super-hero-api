@@ -13,9 +13,5 @@ public class ExceptionConstants {
     public static final String UNAUTHORIZED_CALL = "Please login on http://localhost:8080/login using credentials for endUser "
         + "or admin to obtain a token and access resources";
     public static final String INVALID_TOKEN = "Invalid token received!";
-    public static final String TOKEN = "Bearer %s";
-
-
-
 
 }
