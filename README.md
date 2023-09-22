@@ -1,6 +1,6 @@
 # Superhero API
 
-Welcome to the Superhero API! This is a CRUD (Create, Read, Update, Delete) application that grants you access to a vast database of superheroes, their characteristics, and related information. Whether you're a developer seeking to integrate superhero data into your application or a curious enthusiast, this API offers a wealth of information about your favorite superheroes.
+Welcome to the Superhero API! This is a CRUD (Create, Read, Update, Delete) application that grants you access to a vast database of superheroes, their characteristics, and related information. 
 
 ## Table of Contents
 - [Run Application](#run-application)
