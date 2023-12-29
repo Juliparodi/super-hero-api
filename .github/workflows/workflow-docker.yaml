@@ -34,9 +34,8 @@ jobs:
 
       - name: Build and Push Docker Image
         run: |
-          docker buildx create --use
-          docker buildx build --platform linux/amd64 -t juliparodi/apps/superhero-app:latest .
-          docker push juliparodi/apps/superhero-app:latest
+          docker build --platform linux/amd64 -t juliparodi/super-hero-api:latest .
+          docker push juliparodi/super-hero-api:latest
 
   analyze:
     name: Analyze

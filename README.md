@@ -15,11 +15,11 @@ You have 2 options to run application:
 1. **Using Docker**:
     - Pull the application Docker Image from the `juliparodi/apps` public repository with this command:
       ```bash
-      docker pull juliparodi/apps:superhero-app
+      docker pull juliparodi/superhero-app:latest
       ```
     - Then run it in detached mode on port 8080:
       ```bash
-      docker run -d -p 8080:8080 juliparodi/apps:superhero-app
+      docker run -d -p 8080:8080 juliparodi/superhero-app:latest
       ```
 2. **Cloning the Repository**:
    - You can clone [superhero-repository](https://github.com/Juliparodi/super-hero-api) and:
