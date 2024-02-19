@@ -6,9 +6,10 @@ pipeline {
     }
 
     stages {
-        stage('Verify Branch') {
+        stage('Checkout') {
             steps {
-                echo "$GIT_BRANCH"
+                // Get some code from a GitHub repository
+                checkout([$class: 'GitSCM', branches: [[name: $GIT_BRANCH]], userRemoteConfigs: [[url: 'https://github.com/Juliparodi/super-hero-api.git']]])
             }
         }
         stage('Build') {
@@ -17,16 +18,26 @@ pipeline {
                 git 'https://github.com/Juliparodi/super-hero-api.git'
 
                 // Run Maven on a Unix agent.
-                sh "mvn -Dmaven.test.failure.ignore=true clean package"
+                sh "mvn package -DskipTests"
+            }
+        }
+        stage('Test') {
+            steps {
+                // Get some code from a GitHub repository
+                git 'https://github.com/Juliparodi/super-hero-api.git'
 
-                // To run Maven on a Windows agent, use
-                // bat "mvn -Dmaven.test.failure.ignore=true clean package"
+                // Run Maven on a Unix agent.
+                sh "mvn test"
             }
 
             post {
-                // If Maven was able to run the tests, even if some of the test
-                // failed, record the test results and archive the jar file.
                 success {
+                    echo "test passed :)"
+                    junit '**/target/surefire-reports/TEST-*.xml'
+                    archiveArtifacts 'target/*.jar'
+                }
+                success {
+                    echo "test failed :("
                     junit '**/target/surefire-reports/TEST-*.xml'
                     archiveArtifacts 'target/*.jar'
                 }
