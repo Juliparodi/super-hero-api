@@ -9,7 +9,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 // Get some code from a GitHub repository
-                checkout([$class: 'GitSCM', branches: [[name: $GIT_BRANCH]], userRemoteConfigs: [[url: 'https://github.com/Juliparodi/super-hero-api.git']]])
+                checkout([$class: 'GitSCM', userRemoteConfigs: [[url: 'https://github.com/Juliparodi/super-hero-api.git']]])
             }
         }
         stage('Build') {
