@@ -5,6 +5,10 @@ pipeline {
         maven "M3"
     }
 
+    environment {
+        CODECOV_TOKEN = credentials('CodecovToken')
+    }
+
     stages {
         stage('Checkout') {
             steps {
@@ -32,14 +36,20 @@ pipeline {
 
             post {
                 success {
-                    echo "test passed :)"
-                    junit '**/target/surefire-reports/TEST-*.xml'
-                    archiveArtifacts 'target/*.jar'
+                    echo "test passed"
+                    script {
+                        withCredentials([string(credentialsId: 'CODECOV_TOKEN', variable: 'CODECOV_TOKEN')]) {
+                            sh 'docker run --rm -v $PWD:/tmp -e CODECOV_TOKEN=$CODECOV_TOKEN codecov/codecov:latest'
+                        }
+                    }
                 }
                 failure  {
-                    echo "test failed :("
-                    junit '**/target/surefire-reports/TEST-*.xml'
-                    archiveArtifacts 'target/*.jar'
+                    echo "test failed"
+                    script {
+                        withCredentials([string(credentialsId: 'CODECOV_TOKEN', variable: 'CODECOV_TOKEN')]) {
+                            sh 'docker run --rm -v $PWD:/tmp -e CODECOV_TOKEN=$CODECOV_TOKEN codecov/codecov:latest'
+                        }
+                    }
                 }
             }
         }
