@@ -119,12 +119,11 @@ jobs:
         run: |
           oc project ${{ secrets.OPENSHIFT_PROJECT }}
 
-      - name: Print current working directory
-        run: pwd
-
-      - name: List files in current directory
-        run: ls -al
-
       - name: Deploy using Helm
         run: |
           helm upgrade --install superhero-app ./helm/super-hero --namespace=${{ secrets.OPENSHIFT_PROJECT }}
+
+      - name: Wait for the application pod to be ready
+        run: |
+         # Wait for the pod to be running
+         oc wait --for=condition=available --timeout=600s deployment/superhero-app --namespace=${{ secrets.OPENSHIFT_PROJECT }}
