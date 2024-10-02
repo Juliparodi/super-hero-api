@@ -45,8 +45,8 @@ jobs:
 
       - name: Build and Push Docker Image
         run: |
-          docker build --platform linux/amd64 -t juliparodi/super-hero-api:latest .
-          docker push juliparodi/super-hero-api:latest
+          docker build --platform linux/amd64 -t juliparodi/super-hero-api:$GITHUB_SHA .
+          docker push juliparodi/super-hero-api:$GITHUB_SHA
       
       
 
