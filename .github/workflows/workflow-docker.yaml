@@ -121,9 +121,9 @@ jobs:
 
       - name: Deploy using Helm
         run: |
-          helm upgrade --install superhero-app ./helm/super-hero --namespace=${{ secrets.OPENSHIFT_PROJECT }}
+          helm upgrade --install superhero-app ./helm/super-hero --namespace=${{ secrets.OPENSHIFT_PROJECT }} --set image.tag=$GITHUB_SHA
 
       - name: Wait for the application pod to be ready
         run: |
          # Wait for the pod to be running
-         oc wait --for=condition=available --timeout=600s deployment/superhero-app --namespace=${{ secrets.OPENSHIFT_PROJECT }} --set image.tag=$GITHUB_SHA
+         oc wait --for=condition=available --timeout=600s deployment/superhero-app --namespace=${{ secrets.OPENSHIFT_PROJECT }} --set image.tag=$GITHUB_SHA 
