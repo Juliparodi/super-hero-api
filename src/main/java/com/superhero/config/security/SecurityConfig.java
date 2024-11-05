@@ -64,7 +64,10 @@ public class SecurityConfig {
                     .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             )
             .csrf(AbstractHttpConfigurer::disable)
-            .authorizeHttpRequests(requests->requests
+            .authorizeHttpRequests(requests-> requests
+                .requestMatchers(AntPathRequestMatcher.antMatcher((HttpMethod.GET),"/actuator/**")).permitAll()
+                .requestMatchers(AntPathRequestMatcher.antMatcher((HttpMethod.GET),"/actuator/health")).permitAll()
+                .requestMatchers(AntPathRequestMatcher.antMatcher((HttpMethod.GET),"/actuator/custom-health")).permitAll()
                 .requestMatchers(AntPathRequestMatcher.antMatcher("/swagger-ui/**")).permitAll()
                 .requestMatchers(AntPathRequestMatcher.antMatcher("/swagger-ui/swagger-ui.html/**")).permitAll()
                 .requestMatchers(AntPathRequestMatcher.antMatcher("/swagger-ui/swagger-ui.html#/**")).permitAll()

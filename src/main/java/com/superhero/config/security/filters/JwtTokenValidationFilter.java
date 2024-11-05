@@ -61,7 +61,8 @@ public class JwtTokenValidationFilter extends OncePerRequestFilter {
         String url = request.getRequestURI();
         return "/login".equals(url)
             || url.contains("/swagger-ui")
-            || url.contains("/v3");
+            || url.contains("/v3")
+            || url.contains("/actuator");
     }
 
 
