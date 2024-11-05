@@ -50,7 +50,7 @@ jobs:
       - name: Run Snyk Container Scan
         uses: snyk/actions/docker@master
         with:
-          image: my-app-image:latest
+          image: juliparodi/super-hero-api:$GITHUB_SHA
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
@@ -59,7 +59,7 @@ jobs:
         uses: snyk/actions/docker@master
         with:
           command: monitor
-          image: my-app-image:latest
+          image: juliparodi/super-hero-api:$GITHUB_SHA
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
