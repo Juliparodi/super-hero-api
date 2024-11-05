@@ -85,15 +85,18 @@ resources: {}
   #   cpu: 100m
   #   memory: 128Mi
 
-# This is to setup the liveness and readiness probes more information can be found here: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
-livenessProbe:
-  httpGet:
-    path: /
-    port: 8080
 readinessProbe:
   httpGet:
-    path: /
+    path: /actuator/custom-health  # Adjust the path to your custom health endpoint
     port: 8080
+  initialDelaySeconds: 5
+  periodSeconds: 10
+livenessProbe:
+  httpGet:
+    path: /actuator/health  # Use the default health endpoint for liveness
+    port: 8080
+  initialDelaySeconds: 10
+  periodSeconds: 15
 
 #This section is for setting up autoscaling more information can be found here: https://kubernetes.io/docs/concepts/workloads/autoscaling/
 autoscaling:
