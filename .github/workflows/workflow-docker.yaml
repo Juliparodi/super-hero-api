@@ -41,7 +41,6 @@ jobs:
         uses: docker/setup-buildx-action@v1
 
       - name: Java image dependency scan
-        working-directory: application
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
           DOCKER_BUILDKIT: 1
