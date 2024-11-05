@@ -51,6 +51,7 @@ jobs:
         uses: snyk/actions/docker@master
         with:
           image: juliparodi/super-hero-api:$GITHUB_SHA
+          severity-threshold: high  # Fail the pipeline for high and critical vulnerabilities
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
