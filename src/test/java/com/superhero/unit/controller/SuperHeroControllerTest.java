@@ -24,7 +24,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.superhero.constants.ExceptionConstants;
 import com.superhero.controller.SuperHeroController;
+import com.superhero.exception.SuperHeroNotFoundException;
 import com.superhero.model.SuperHero;
 import com.superhero.services.ISuperHeroService;
 import com.superhero.utils.JsonConverter;

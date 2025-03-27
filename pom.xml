@@ -134,6 +134,31 @@
 					</execution>
 				</executions>
 			</plugin>
+			<plugin>
+				<groupId>org.pitest</groupId>
+				<artifactId>pitest-maven</artifactId>
+				<version>1.14.0</version>
+				<configuration>
+					<targetClasses>com.superhero.*</targetClasses>
+					<targetTests>com.superhero.*</targetTests>
+					<mutators>DEFAULTS</mutators>
+					<excludedTestClasses>
+						<param>*Integration*</param>
+					</excludedTestClasses>
+					<excludedClasses>
+						<param>com.superhero.annotations.*</param>
+						<param>com.superhero.config.*</param>
+						<param>com.superhero.model.*</param>
+					</excludedClasses>
+				</configuration>
+				<dependencies>
+					<dependency>
+						<groupId>org.pitest</groupId>
+						<artifactId>pitest-junit5-plugin</artifactId>
+						<version>1.2.1</version>
+					</dependency>
+				</dependencies>
+			</plugin>
 		</plugins>
 	</build>
 

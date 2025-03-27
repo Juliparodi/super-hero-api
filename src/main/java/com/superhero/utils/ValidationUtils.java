@@ -1,14 +1,15 @@
 package com.superhero.utils;
 
+import com.superhero.exception.ValidationException;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+import org.springframework.util.StringUtils;
+
 import static com.superhero.constants.ExceptionConstants.VALIDATE_PARAMS_NOT_EMPTY;
 import static com.superhero.constants.ExceptionConstants.VALIDATE_PARAMS_NOT_NUMBER;
 
-import com.superhero.exception.ValidationException;
-import org.springframework.util.StringUtils;
-
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ValidationUtils {
-
-    private ValidationUtils(){}
 
     public static void validateString(String value) {
         if (!StringUtils.hasText(value)) {
