@@ -70,6 +70,11 @@ To get started with the Superhero API, follow these simple steps:
 - **DB version control**: [Flyway](https://flywaydb.org/)
 - **Cache**: [Spring Cache](https://docs.spring.io/spring-boot/docs/current/reference/html/io.html)
 
+### Tests
+- **Tests Coverage**:
+    - Jacoco: 90%
+    - Mutation test: 88%
+
 ### Key Features
 
 - **Superheroes Information**: Access detailed information about superheroes, including their names, description, birthDate, and more. You can also find a specific Hero by ID.
