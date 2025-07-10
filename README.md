@@ -99,5 +99,3 @@ Security is a top priority for the Superhero API. We use industry-standard secur
 ## Contact
 
 For any inquiries, reporting errors, or providing advice on API improvements, please contact me at julianparodi19@gmail.com.
-
-  
