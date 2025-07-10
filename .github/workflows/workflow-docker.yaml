@@ -145,4 +145,4 @@ jobs:
       - name: Wait for the application pod to be ready
         run: |
          # Wait for the pod to be running
-         oc wait --for=condition=available --timeout=600s deployment/superhero-app --namespace=${{ secrets.OPENSHIFT_PROJECT }} --set image.tag=$GITHUB_SHA 
+           oc wait --for=condition=available --timeout=600s deployment/superhero-app --namespace=${{ secrets.OPENSHIFT_PROJECT }}
