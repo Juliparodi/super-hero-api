@@ -89,13 +89,13 @@ readinessProbe:
   httpGet:
     path: /actuator/custom-health  # Adjust the path to your custom health endpoint
     port: 8080
-  initialDelaySeconds: 5
+  initialDelaySeconds: 60
   periodSeconds: 10
 livenessProbe:
   httpGet:
     path: /actuator/health  # Use the default health endpoint for liveness
     port: 8080
-  initialDelaySeconds: 10
+  initialDelaySeconds: 60
   periodSeconds: 15
 
 #This section is for setting up autoscaling more information can be found here: https://kubernetes.io/docs/concepts/workloads/autoscaling/
