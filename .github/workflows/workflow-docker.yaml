@@ -151,21 +151,21 @@ jobs:
       - name: Deploy Prometheus and Grafana Stack
         run: |
           helm upgrade --install monitoring prometheus-community/kube-prometheus-stack \
-            --namespace monitoring --create-namespace \
+            --namespace=${{ secrets.OPENSHIFT_PROJECT }} --create-namespace \
             --set grafana.adminPassword=${{ secrets.GRAFANA_PASSWORD }} \
             --wait
 
       - name: Expose Grafana via Route
         run: |
-            oc expose svc monitoring-kube-prometheus-stack-grafana -n monitoring
+            oc expose svc monitoring-kube-prometheus-stack-grafana -n ${{ secrets.OPENSHIFT_PROJECT }}
 
       - name: Deploy ServiceMonitor
         run: |
             oc apply -f ./k8s/monitoring/servicemonitor.yaml
       - name: Wait for Prometheus & Grafana to be ready
         run: |
-          oc rollout status deployment/monitoring-kube-prometheus-stack-grafana -n monitoring --timeout=600s
-          oc rollout status deployment/monitoring-kube-prometheus-stack-prometheus -n monitoring --timeout=600s
+          oc rollout status deployment/monitoring-kube-prometheus-stack-grafana -n ${{ secrets.OPENSHIFT_PROJECT }} --timeout=600s
+          oc rollout status deployment/monitoring-kube-prometheus-stack-prometheus -n ${{ secrets.OPENSHIFT_PROJECT }} --timeout=600s
 
       - name: Wait for the application pod to be ready
         run: |
