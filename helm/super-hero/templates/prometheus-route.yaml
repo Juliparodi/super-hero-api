@@ -10,5 +10,3 @@ spec:
     name: {{ include "super-hero.fullname" . }}-prometheus
   port:
     targetPort: 9090
-  tls:
-    termination: edge  # Optional: enable HTTPS
