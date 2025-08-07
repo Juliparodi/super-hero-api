@@ -1,0 +1,14 @@
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: {{ include "super-hero.fullname" . }}-prometheus
+  labels:
+    app: {{ include "super-hero.name" . }}
+spec:
+  to:
+    kind: Service
+    name: {{ include "super-hero.fullname" . }}-prometheus
+  port:
+    targetPort: 9090
+  tls:
+    termination: edge  # Optional: enable HTTPS
