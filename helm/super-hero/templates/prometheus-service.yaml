@@ -5,9 +5,9 @@ metadata:
   labels:
     {{- include "super-hero.labels" . | nindent 4 }}
 spec:
-  selector:
-    { { - include "super-hero.selectorLabels" . | nindent 4 } }
   ports:
     - protocol: TCP
       port: 9090
       targetPort: 9090
+  selector:
+    {{- include "super-hero.selectorLabels" . | nindent 4 }}
