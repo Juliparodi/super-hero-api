@@ -3,10 +3,10 @@ kind: Service
 metadata:
   name: {{ include "super-hero.fullname" . }}-prometheus
   labels:
-    app: {{ include "super-hero.name" . }}
+    {{- include "super-hero.labels" . | nindent 4 }}
 spec:
   selector:
-    app: {{ include "super-hero.name" . }}
+    { { - include "super-hero.selectorLabels" . | nindent 4 } }
   ports:
     - protocol: TCP
       port: 9090
