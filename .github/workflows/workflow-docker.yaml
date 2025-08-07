@@ -142,28 +142,6 @@ jobs:
         run: |
           helm upgrade --install superhero-app ./helm/super-hero --namespace=${{ secrets.OPENSHIFT_PROJECT }} --set image.tag=$GITHUB_SHA
 
-      - name: Add Grafana Helm repo
-        run: |
-            helm repo add grafana https://grafana.github.io/helm-charts
-            helm repo update
-
-      - name: Deploy standalone Grafana
-        run: |
-          helm upgrade --install grafana grafana/grafana \
-            --namespace=${{ secrets.OPENSHIFT_PROJECT }} \
-            --set adminPassword=${{ secrets.GRAFANA_PASSWORD }} \
-            --set service.type=ClusterIP \
-            --wait
-
-      - name: Expose Grafana via OpenShift Route
-        run: |
-          oc expose svc grafana -n ${{ secrets.OPENSHIFT_PROJECT }}
-
-      - name: Wait for Prometheus & Grafana pods to be ready
-        run: |
-          oc rollout status deployment/prometheus-server -n ${{ secrets.OPENSHIFT_PROJECT }} --timeout=300s
-          oc rollout status deployment/grafana -n ${{ secrets.OPENSHIFT_PROJECT }} --timeout=300s
-
       - name: Wait for the superhero-app pod to be ready
         run: |
           oc wait --for=condition=available --timeout=600s deployment/superhero-app --namespace=${{ secrets.OPENSHIFT_PROJECT }}
