@@ -1,8 +1,5 @@
 package com.superhero.config.security;
 
-import static com.superhero.constants.SecurityConstants.ROLE_ADMIN;
-import static com.superhero.constants.SecurityConstants.ROLE_READ;
-
 import com.superhero.config.security.filters.CustomJwtAuthenticationFilter;
 import com.superhero.config.security.filters.JwtTokenValidationFilter;
 import com.superhero.utils.JwtUtilsWrapper;
@@ -26,7 +23,14 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.List;
+
+import static com.superhero.constants.SecurityConstants.ROLE_ADMIN;
+import static com.superhero.constants.SecurityConstants.ROLE_READ;
 
 @Configuration
 @EnableWebSecurity
@@ -86,6 +90,19 @@ public class SecurityConfig {
             .addFilterBefore(new CustomJwtAuthenticationFilter(authenticationManager(), jwtUtils), UsernamePasswordAuthenticationFilter.class)
             .formLogin(Customizer.withDefaults());
         return http.build();
+    }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowedOrigins(List.of("http://localhost:3000"));
+        config.setAllowedMethods(List.of("GET","POST","PUT","DELETE","OPTIONS"));
+        config.setAllowedHeaders(List.of("*"));
+        config.setAllowCredentials(true);
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", config);
+        return source;
     }
 
     @Bean
