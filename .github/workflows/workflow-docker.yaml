@@ -4,7 +4,8 @@ on:
   push:
     branches:
       - master
-      
+  workflow_dispatch:
+
 env:
   DOCKER_IMAGE_TAG: ${{ github.ref == 'refs/heads/master' && 'prod-' || 'dev-' }}${{ github.sha }}
   GITHUB_REGISTRY: ghcr.io
