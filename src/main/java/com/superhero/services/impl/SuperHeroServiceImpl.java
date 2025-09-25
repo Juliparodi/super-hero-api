@@ -5,12 +5,13 @@ import com.superhero.exception.SuperHeroNotFoundException;
 import com.superhero.model.SuperHero;
 import com.superhero.repository.SuperHeroRepository;
 import com.superhero.services.ISuperHeroService;
-import java.util.List;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Log4j2
 @Service
@@ -52,7 +53,7 @@ public class SuperHeroServiceImpl implements ISuperHeroService {
         return superHeroRepository.save(superHero);
     }
 
-    @CacheEvict(value = {"superHeroByIdCache", "getAllSuperHeroesCache", "searchSuperHeroesByTextCache"}, key = "#id")
+    @CacheEvict(value = {"superHeroByIdCache", "getAllSuperHeroesCache", "searchSuperHeroesByTextCache"}, allEntries = true)
     @Override
     public SuperHero updateSuperHero(SuperHero inputSuperHero, long id) {
 
@@ -69,7 +70,7 @@ public class SuperHeroServiceImpl implements ISuperHeroService {
         return superHeroRepository.save(superHeroUpdated);
     }
 
-    @CacheEvict(value = {"superHeroByIdCache", "getAllSuperHeroesCache", "searchSuperHeroesByTextCache"}, key = "#id")
+    @CacheEvict(value = {"superHeroByIdCache", "getAllSuperHeroesCache", "searchSuperHeroesByTextCache"}, allEntries = true)
     @Override
     public void deleteSuperHero(long id) {
         superHeroRepository.deleteById(findById(id).getId());
