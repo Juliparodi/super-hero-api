@@ -87,14 +87,16 @@ resources: {}
 
 readinessProbe:
   httpGet:
-    path: /actuator/custom-health  # Adjust the path to your custom health endpoint
+    path: /actuator/custom-health
     port: 8443
+    scheme: HTTPS
   initialDelaySeconds: 60
   periodSeconds: 10
 livenessProbe:
   httpGet:
-    path: /actuator/health  # Use the default health endpoint for liveness
+    path: /actuator/health
     port: 8443
+    scheme: HTTPS
   initialDelaySeconds: 60
   periodSeconds: 15
 
