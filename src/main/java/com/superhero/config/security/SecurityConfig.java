@@ -67,6 +67,7 @@ public class SecurityConfig {
                 sessionManagement
                     .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             )
+            .cors(Customizer.withDefaults())
             .csrf(AbstractHttpConfigurer::disable)
             .authorizeHttpRequests(requests-> requests
                 .requestMatchers(AntPathRequestMatcher.antMatcher((HttpMethod.GET),"/actuator/**")).permitAll()
@@ -95,7 +96,8 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of("http://localhost:3000"));
+        config.setAllowedOrigins(List.of("http://localhost:3000",
+            "https://public-superhero-juliparodi19-dev.apps.rm1.0a51.p1.openshiftapps.com"));
         config.setAllowedMethods(List.of("GET","POST","PUT","DELETE","OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
         config.setAllowCredentials(true);
