@@ -17,9 +17,9 @@ You have 2 options to run application:
       ```bash
       docker pull juliparodi/superhero-app:latest
       ```
-    - Then run it in detached mode on port 8080:
+    - Then run it in detached mode on port 8443:
       ```bash
-      docker run -d -p 8080:8080 juliparodi/superhero-app:latest
+      docker run -d -p 8443:8443 juliparodi/superhero-app:latest
       ```
 2. **Cloning the Repository**:
    - You can clone [superhero-repository](https://github.com/Juliparodi/super-hero-api) and:
@@ -39,7 +39,7 @@ To get started with the Superhero API, follow these simple steps:
 
 1. **Authentication**: Before using the API, you may need to log in using these [credentials](#credentials) for an JWT token which you will use to access resources. 
     Here is a step by step on how to do it:
-    - Use /login endpoint provided by [Swagger](http://localhost:8080/swagger-ui/index.html).
+    - Use /login endpoint provided by [Swagger](http://localhost:8443/swagger-ui/index.html).
     - Copy token provided in the response.
     - Paste it in "Authorize" section.
     - Congrats! You now can access resources depending on the user you login.
@@ -47,7 +47,7 @@ To get started with the Superhero API, follow these simple steps:
     For any issue please contact me at julianparodi19@gmail.com
 2. **Making Requests**: Once application is running you can make requests to the API using standard HTTP methods (GET, POST, PUT, DELETE) from [Swagger](http://localhost:8080/swagger-ui/index.html).
 
-3. **API Documentation**: SuperHero API is thoroughly documented using Swagger, a user-friendly interactive documentation tool. You can explore all available endpoints, request/response formats, and example requests by visiting our [Swagger Documentation](http://localhost:8080/swagger-ui/index.html). This is the best place to get detailed information on how to use our API effectively.
+3. **API Documentation**: SuperHero API is thoroughly documented using Swagger, a user-friendly interactive documentation tool. You can explore all available endpoints, request/response formats, and example requests by visiting our [Swagger Documentation](http://localhost:8443/swagger-ui/index.html). This is the best place to get detailed information on how to use our API effectively.
 
 4. **Test**: The SuperHero API is thoroughly tested using a comprehensive suite of tests, including unit, functional, and integration tests. These tests are designed to ensure the reliability, functionality, and security of the API.
     - To run tests just execute in the root diretory
@@ -85,9 +85,13 @@ To get started with the Superhero API, follow these simple steps:
 
 ## Security
 
-Security is a top priority for the Superhero API. We use industry-standard security practices to protect your data and ensure the confidentiality and integrity of your requests. Our authentication mechanism ensures that only authorized users can access the API.
-- To access our GET resources you will have to authenticate and have the role of USER.
-- To access our POST, PUT and DELETE resources you will have to authenticate and have the role of ADMIN.
+Security is a top priority for the Superhero API. We use industry-standard security practices to protect your data and ensure the confidentiality and integrity of your requests. All communication between clients and the backend is secured with HTTPS, so every request is encrypted in transit.
+
+Authentication is handled using JWT (JSON Web Tokens). Only users with a valid token can access the API, and each token encodes the user’s role, which is used for authorization.
+
+- GET resources: To retrieve superheroes or search results, you must authenticate and have the role of USER.
+
+- POST, PUT, DELETE resources: To create, update, or delete superheroes, you must authenticate and have the role of ADMIN.
 
 ## Credentials
 
