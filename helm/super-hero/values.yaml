@@ -126,3 +126,15 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+
+namespace: juliparodi19-dev
+
+route:
+  host: juliparodi-superhero-juliparodi19-dev.apps.rm1.0a51.p1.openshiftapps.com
+  serviceName: superhero-app
+  weight: 100
+  targetPort: https
+  tls:
+    termination: passthrough
+    insecureEdgeTerminationPolicy: Redirect
+  wildcardPolicy: None

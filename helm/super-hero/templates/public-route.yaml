@@ -1,0 +1,19 @@
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: {{ include "super-hero.fullname" . }}-public
+  namespace: {{ .Values.namespace | default .Release.Namespace }}
+  labels:
+    app: {{ include "super-hero.name" . }}
+spec:
+  host: {{ .Values.route.host }}
+  to:
+    kind: Service
+    name: {{ .Values.route.serviceName }}
+    weight: {{ .Values.route.weight | default 100 }}
+  port:
+    targetPort: {{ .Values.route.targetPort | default "https" }}
+  tls:
+    termination: {{ .Values.route.tls.termination | default "passthrough" }}
+    insecureEdgeTerminationPolicy: {{ .Values.route.tls.insecureEdgeTerminationPolicy | default "Redirect" }}
+  wildcardPolicy: {{ .Values.route.wildcardPolicy | default "None" }}
