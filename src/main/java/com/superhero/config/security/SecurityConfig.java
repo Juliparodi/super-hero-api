@@ -67,7 +67,6 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/actuator/**").permitAll() // match all actuator paths
             )
-            .httpBasic(Customizer.withDefaults()); // optional, no formLogin
         return http.build();
     }
 
