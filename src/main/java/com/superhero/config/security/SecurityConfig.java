@@ -5,6 +5,7 @@ import com.superhero.config.security.filters.JwtTokenValidationFilter;
 import com.superhero.utils.JwtUtilsWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.actuate.autoconfigure.security.servlet.EndpointRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -70,6 +71,7 @@ public class SecurityConfig {
             .cors(Customizer.withDefaults())
             .csrf(AbstractHttpConfigurer::disable)
             .authorizeHttpRequests(requests-> requests
+                .requestMatchers(EndpointRequest.to("prometheus")).permitAll()   // only prometheus
                 .requestMatchers(AntPathRequestMatcher.antMatcher((HttpMethod.GET),"/actuator/**")).permitAll()
                 .requestMatchers(AntPathRequestMatcher.antMatcher((HttpMethod.GET),"/actuator/health")).permitAll()
                 .requestMatchers(AntPathRequestMatcher.antMatcher((HttpMethod.GET),"/actuator/custom-health")).permitAll()
@@ -81,8 +83,6 @@ public class SecurityConfig {
                 .requestMatchers(AntPathRequestMatcher.antMatcher("/swagger-ui.html")).permitAll()
                 .requestMatchers(AntPathRequestMatcher.antMatcher("/swagger-ui.html#")).permitAll()
                 .requestMatchers(AntPathRequestMatcher.antMatcher( "/h2-console/**")).permitAll()
-                .requestMatchers(AntPathRequestMatcher.antMatcher((HttpMethod.GET),"/targets")).hasAnyRole(ROLE_ADMIN, ROLE_READ)
-                .requestMatchers(AntPathRequestMatcher.antMatcher((HttpMethod.GET),"/actuator/prometheus")).hasAnyRole(ROLE_ADMIN, ROLE_READ)
                 .requestMatchers(AntPathRequestMatcher.antMatcher((HttpMethod.GET), "/superheroes")).hasAnyRole(ROLE_ADMIN, ROLE_READ)
                 .requestMatchers(AntPathRequestMatcher.antMatcher((HttpMethod.GET), "/search/**")).hasAnyRole(ROLE_ADMIN, ROLE_READ)
                 .requestMatchers(AntPathRequestMatcher.antMatcher((HttpMethod.GET), "/superheroes/**")).hasAnyRole(ROLE_ADMIN, ROLE_READ)
