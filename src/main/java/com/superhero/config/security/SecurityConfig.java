@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
@@ -57,8 +58,20 @@ public class SecurityConfig {
         return authenticationConfiguration.getAuthenticationManager();
     }
 
+    @Bean
+    @Order(1)
+    SecurityFilterChain actuatorSecurity(HttpSecurity http) throws Exception {
+        http
+            .securityMatcher("/actuator/**")
+            .authorizeHttpRequests(auth -> auth.anyRequest().permitAll())
+            .csrf(AbstractHttpConfigurer::disable)
+            .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+        return http.build();
+    }
+
 
     @Bean
+    @Order(2)
     SecurityFilterChain defaultSecurityFilterChain(
         HttpSecurity http) throws Exception {
 
@@ -70,10 +83,6 @@ public class SecurityConfig {
             .cors(Customizer.withDefaults())
             .csrf(AbstractHttpConfigurer::disable)
             .authorizeHttpRequests(requests-> requests
-                .requestMatchers(AntPathRequestMatcher.antMatcher("/actuator/prometheus")).permitAll()
-                .requestMatchers(AntPathRequestMatcher.antMatcher("/actuator/**")).permitAll()
-                .requestMatchers(AntPathRequestMatcher.antMatcher("/actuator/health")).permitAll()
-                .requestMatchers(AntPathRequestMatcher.antMatcher("/actuator/custom-health")).permitAll()
                 .requestMatchers(AntPathRequestMatcher.antMatcher("/swagger-ui/**")).permitAll()
                 .requestMatchers(AntPathRequestMatcher.antMatcher("/swagger-ui/swagger-ui.html/**")).permitAll()
                 .requestMatchers(AntPathRequestMatcher.antMatcher("/swagger-ui/swagger-ui.html#/**")).permitAll()
