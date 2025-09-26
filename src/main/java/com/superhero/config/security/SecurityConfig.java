@@ -70,6 +70,7 @@ public class SecurityConfig {
             .cors(Customizer.withDefaults())
             .csrf(AbstractHttpConfigurer::disable)
             .authorizeHttpRequests(requests-> requests
+                .requestMatchers("/login").permitAll()
                 .requestMatchers(AntPathRequestMatcher.antMatcher("/actuator/**")).permitAll()
                 .requestMatchers(AntPathRequestMatcher.antMatcher("/swagger-ui/**")).permitAll()
                 .requestMatchers(AntPathRequestMatcher.antMatcher("/swagger-ui/swagger-ui.html/**")).permitAll()
@@ -86,8 +87,7 @@ public class SecurityConfig {
                 .requestMatchers(AntPathRequestMatcher.antMatcher((HttpMethod.DELETE), "/superheroes/hero/**")).hasRole(ROLE_ADMIN)
                 .anyRequest().authenticated())
             .addFilterBefore(new JwtTokenValidationFilter(jwtUtils), UsernamePasswordAuthenticationFilter.class)
-            .addFilterBefore(new CustomJwtAuthenticationFilter(authenticationManager(), jwtUtils), UsernamePasswordAuthenticationFilter.class)
-            .formLogin(Customizer.withDefaults());
+            .addFilterBefore(new CustomJwtAuthenticationFilter(authenticationManager(), jwtUtils), UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 
