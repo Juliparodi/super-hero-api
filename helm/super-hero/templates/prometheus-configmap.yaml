@@ -8,5 +8,6 @@ data:
       scrape_interval: 15s
     scrape_configs:
       - job_name: 'superhero-app'
+        metrics_path: /actuator/prometheus
         static_configs:
           - targets: ['localhost:{{ .Values.service.port }}']
