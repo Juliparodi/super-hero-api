@@ -1,16 +1,17 @@
 package com.superhero.config.security.filters;
 
-import static com.superhero.constants.ExceptionConstants.INVALID_TOKEN;
-import static com.superhero.constants.ExceptionConstants.UNAUTHORIZED_CALL;
-import static com.superhero.constants.SecurityConstants.JWT_HEADER;
-
 import com.superhero.utils.JwtUtilsWrapper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+
+import java.io.IOException;
+
+import static com.superhero.constants.ExceptionConstants.INVALID_TOKEN;
+import static com.superhero.constants.ExceptionConstants.UNAUTHORIZED_CALL;
+import static com.superhero.constants.SecurityConstants.JWT_HEADER;
 
 @Component
 public class JwtTokenValidationFilter extends OncePerRequestFilter {
@@ -62,7 +63,9 @@ public class JwtTokenValidationFilter extends OncePerRequestFilter {
         return "/login".equals(url)
             || url.contains("/swagger-ui")
             || url.contains("/v3")
-            || url.contains("/actuator");
+            || url.contains("/actuator")
+            || url.contains("/targets")
+            || url.contains("/h2-console");
     }
 
 
