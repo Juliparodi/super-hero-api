@@ -62,10 +62,12 @@ public class SecurityConfig {
     @Order(1)
     SecurityFilterChain actuatorSecurity(HttpSecurity http) throws Exception {
         http
-            .securityMatcher("/actuator/**")
-            .authorizeHttpRequests(auth -> auth.anyRequest().permitAll())
             .csrf(AbstractHttpConfigurer::disable)
-            .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+            .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .authorizeHttpRequests(auth -> auth
+                .requestMatchers("/actuator/**").permitAll() // match all actuator paths
+            )
+            .httpBasic(Customizer.withDefaults()); // optional, no formLogin
         return http.build();
     }
 
