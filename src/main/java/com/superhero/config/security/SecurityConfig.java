@@ -71,7 +71,7 @@ public class SecurityConfig {
             .cors(Customizer.withDefaults())
             .csrf(AbstractHttpConfigurer::disable)
             .authorizeHttpRequests(requests-> requests
-                .requestMatchers(EndpointRequest.to("prometheus")).permitAll()   // only prometheus
+                .requestMatchers(EndpointRequest.to("prometheus")).permitAll()
                 .requestMatchers(AntPathRequestMatcher.antMatcher((HttpMethod.GET),"/actuator/**")).permitAll()
                 .requestMatchers(AntPathRequestMatcher.antMatcher((HttpMethod.GET),"/actuator/health")).permitAll()
                 .requestMatchers(AntPathRequestMatcher.antMatcher((HttpMethod.GET),"/actuator/custom-health")).permitAll()
