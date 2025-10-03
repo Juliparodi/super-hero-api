@@ -109,6 +109,8 @@ Authentication is handled using JWT (JSON Web Tokens). Only users with a valid t
 
 For any inquiries, reporting errors, or providing advice on API improvements, please contact me at julianparodi19@gmail.com.
 
-## Troubleshooting
+## Monitoring
 
-- Spring security with prometheus
+Super Hero exposes metrics via Actuator at /actuator/prometheus. A Prometheus sidecar scrapes these metrics and exposes a route that can be used by Grafana dashboards. The dashboards visualize request rates, latency, errors, JVM health, and custom business metrics. Spring Security ensures only authorized access to sensitive endpoints while allowing monitoring. This setup provides secure, real-time insights into application performance and health.
+
+<img alt="Grafana Dashboard" height="500" src="src/main/resources/docs/dashboard-superhero.png" width="800"/>
