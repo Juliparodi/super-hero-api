@@ -108,3 +108,7 @@ Authentication is handled using JWT (JSON Web Tokens). Only users with a valid t
 ## Contact
 
 For any inquiries, reporting errors, or providing advice on API improvements, please contact me at julianparodi19@gmail.com.
+
+## Troubleshooting
+
+- Spring security with prometheus
