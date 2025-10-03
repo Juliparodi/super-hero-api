@@ -4,9 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.superhero.constants.SecurityConstants;
 import com.superhero.utils.JwtUtilsWrapper;
 import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.ServletRequest;
-import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.log4j.Log4j2;
@@ -63,31 +60,5 @@ public class CustomJwtAuthenticationFilter extends UsernamePasswordAuthenticatio
         ));
         response.getWriter().flush();
     }
-
-    @Override
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
-        throws IOException, ServletException {
-
-        HttpServletRequest httpRequest = (HttpServletRequest) request;
-        String url = httpRequest.getRequestURI();
-
-        if (shouldSkip(url)) {
-            chain.doFilter(request, response);
-            return;
-        }
-
-        super.doFilter(request, response, chain);
-    }
-
-    private boolean shouldSkip(String url) {
-        return "/login".equals(url)
-            || url.contains("/swagger-ui")
-            || url.contains("/v3")
-            || url.contains("/actuator")
-            || url.contains("/targets")
-            || url.contains("/h2-console");
-    }
-
-
 
 }
