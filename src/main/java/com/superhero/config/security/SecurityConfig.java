@@ -23,7 +23,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.web.servlet.util.matcher.PathPatternRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -72,23 +72,17 @@ public class SecurityConfig {
             .csrf(AbstractHttpConfigurer::disable)
             .authorizeHttpRequests(requests-> requests
                 .requestMatchers(EndpointRequest.to("prometheus")).permitAll()
-                .requestMatchers(AntPathRequestMatcher.antMatcher((HttpMethod.GET),"/actuator/**")).permitAll()
-                .requestMatchers(AntPathRequestMatcher.antMatcher((HttpMethod.GET),"/actuator/health")).permitAll()
-                .requestMatchers(AntPathRequestMatcher.antMatcher((HttpMethod.GET),"/actuator/custom-health")).permitAll()
-                .requestMatchers(AntPathRequestMatcher.antMatcher((HttpMethod.GET),"/actuator/health")).permitAll()
-                .requestMatchers(AntPathRequestMatcher.antMatcher("/swagger-ui/**")).permitAll()
-                .requestMatchers(AntPathRequestMatcher.antMatcher("/swagger-ui/swagger-ui.html/**")).permitAll()
-                .requestMatchers(AntPathRequestMatcher.antMatcher("/swagger-ui/swagger-ui.html#/**")).permitAll()
-                .requestMatchers(AntPathRequestMatcher.antMatcher("/v3/api-docs/**")).permitAll()
-                .requestMatchers(AntPathRequestMatcher.antMatcher("/swagger-ui.html")).permitAll()
-                .requestMatchers(AntPathRequestMatcher.antMatcher("/swagger-ui.html#")).permitAll()
-                .requestMatchers(AntPathRequestMatcher.antMatcher( "/h2-console/**")).permitAll()
-                .requestMatchers(AntPathRequestMatcher.antMatcher((HttpMethod.GET), "/superheroes")).hasAnyRole(ROLE_ADMIN, ROLE_READ)
-                .requestMatchers(AntPathRequestMatcher.antMatcher((HttpMethod.GET), "/search/**")).hasAnyRole(ROLE_ADMIN, ROLE_READ)
-                .requestMatchers(AntPathRequestMatcher.antMatcher((HttpMethod.GET), "/superheroes/**")).hasAnyRole(ROLE_ADMIN, ROLE_READ)
-                .requestMatchers(AntPathRequestMatcher.antMatcher((HttpMethod.POST), "/superheroes/hero")).hasRole(ROLE_ADMIN)
-                .requestMatchers(AntPathRequestMatcher.antMatcher((HttpMethod.PUT), "/superheroes/hero/**")).hasRole(ROLE_ADMIN)
-                .requestMatchers(AntPathRequestMatcher.antMatcher((HttpMethod.DELETE), "/superheroes/hero/**")).hasRole(ROLE_ADMIN)
+                .requestMatchers(PathPatternRequestMatcher.withDefaults().matcher(HttpMethod.GET, "/actuator/health")).permitAll()
+                .requestMatchers(PathPatternRequestMatcher.withDefaults().matcher(HttpMethod.GET, "/actuator/custom-health")).permitAll()
+                .requestMatchers(PathPatternRequestMatcher.withDefaults().matcher("/swagger-ui/**")).permitAll()
+                .requestMatchers(PathPatternRequestMatcher.withDefaults().matcher("/v3/api-docs/**")).permitAll()
+                .requestMatchers(PathPatternRequestMatcher.withDefaults().matcher("/h2-console/**")).permitAll()
+                .requestMatchers(PathPatternRequestMatcher.withDefaults().matcher(HttpMethod.GET, "/superheroes")).hasAnyRole(ROLE_ADMIN, ROLE_READ)
+                .requestMatchers(PathPatternRequestMatcher.withDefaults().matcher(HttpMethod.GET, "/search/**")).hasAnyRole(ROLE_ADMIN, ROLE_READ)
+                .requestMatchers(PathPatternRequestMatcher.withDefaults().matcher(HttpMethod.GET, "/superheroes/**")).hasAnyRole(ROLE_ADMIN, ROLE_READ)
+                .requestMatchers(PathPatternRequestMatcher.withDefaults().matcher(HttpMethod.POST, "/superheroes/hero")).hasRole(ROLE_ADMIN)
+                .requestMatchers(PathPatternRequestMatcher.withDefaults().matcher(HttpMethod.PUT, "/superheroes/hero/**")).hasRole(ROLE_ADMIN)
+                .requestMatchers(PathPatternRequestMatcher.withDefaults().matcher(HttpMethod.DELETE, "/superheroes/hero/**")).hasRole(ROLE_ADMIN)
                 .anyRequest().authenticated())
             .addFilterBefore(new JwtTokenValidationFilter(jwtUtils), UsernamePasswordAuthenticationFilter.class)
             .addFilterBefore(new CustomJwtAuthenticationFilter(authenticationManager(), jwtUtils), UsernamePasswordAuthenticationFilter.class)

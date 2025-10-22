@@ -39,13 +39,13 @@ To get started with the Superhero API, follow these simple steps:
 
 1. **Authentication**: Before using the API, you may need to log in using these [credentials](#credentials) for an JWT token which you will use to access resources. 
     Here is a step by step on how to do it:
-    - Use /login endpoint provided by [Swagger](http://localhost:8443/swagger-ui/index.html).
+    - Use /login endpoint provided by [Swagger](https://localhost:8443/swagger-ui/index.html).
     - Copy token provided in the response.
     - Paste it in "Authorize" section.
     - Congrats! You now can access resources depending on the user you login.
     
     For any issue please contact me at julianparodi19@gmail.com
-2. **Making Requests**: Once application is running you can make requests to the API using standard HTTP methods (GET, POST, PUT, DELETE) from [Swagger](http://localhost:8080/swagger-ui/index.html).
+2. **Making Requests**: Once application is running you can make requests to the API using standard HTTP methods (GET, POST, PUT, DELETE) from [Swagger](https://localhost:8443/swagger-ui/index.html).
 
 3. **API Documentation**: SuperHero API is thoroughly documented using Swagger, a user-friendly interactive documentation tool. You can explore all available endpoints, request/response formats, and example requests by visiting our [Swagger Documentation](http://localhost:8443/swagger-ui/index.html). This is the best place to get detailed information on how to use our API effectively.
 
