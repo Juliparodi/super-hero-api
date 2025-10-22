@@ -1,52 +1,41 @@
 package com.superhero.unit.controller;
 
-import static com.superhero.constants.OutputMessageConstants.CREATED;
-import static com.superhero.constants.OutputMessageConstants.DELETED;
-import static com.superhero.constants.OutputMessageConstants.MESSAGE_OUTPUT;
-import static com.superhero.constants.OutputMessageConstants.UPDATED;
-import static com.superhero.factory.SuperHeroesFactory.getAllSuperHeroesWithIdAndDates;
-import static com.superhero.factory.SuperHeroesFactory.getSuperHero;
-import static com.superhero.factory.SuperHeroesFactory.getSuperHeroContains;
-import static com.superhero.factory.SuperHeroesFactory.inputUpdatedSuperHero;
-import static com.superhero.factory.SuperHeroesFactory.newSuperHero;
-import static com.superhero.utils.JsonConverter.toJson;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.superhero.constants.ExceptionConstants;
 import com.superhero.controller.SuperHeroController;
-import com.superhero.exception.SuperHeroNotFoundException;
 import com.superhero.model.SuperHero;
 import com.superhero.services.ISuperHeroService;
 import com.superhero.utils.JsonConverter;
-import java.text.SimpleDateFormat;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;;
+import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+
+import java.text.SimpleDateFormat;
+
+import static com.superhero.constants.OutputMessageConstants.*;
+import static com.superhero.factory.SuperHeroesFactory.*;
+import static com.superhero.utils.JsonConverter.toJson;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 public class SuperHeroControllerTest {
 
-    @MockBean
+    @MockitoBean
     private MockMvc mockMvc;
     @Mock
     private ISuperHeroService superHeroService;

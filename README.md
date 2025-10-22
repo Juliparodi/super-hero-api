@@ -58,7 +58,7 @@ To get started with the Superhero API, follow these simple steps:
 
 ### Technologies Used
 
-- **Programming Language**: [Java 17](https://docs.oracle.com/en/java/javase/17/docs/api/index.html)
+- **Programming Language**: [Java 25](https://docs.oracle.com/en/java/javase/25/docs/api/index.html)
 - **Database**: [H2](http://h2database.com/html/main.html)
 - **Web Framework**: [Spring Boot](https://spring.io/projects/spring-boot)
 - **API Security**: [Spring Security](https://spring.io/projects/spring-security)
