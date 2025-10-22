@@ -48,6 +48,15 @@ jobs:
         run: |
           docker build --platform linux/amd64 -t juliparodi/super-hero-api:$GITHUB_SHA .
 
+      - name: Run Snyk Code Analysis
+        uses: snyk/actions/code@master
+        with:
+          project-name: super-hero-api
+          severity-threshold: high
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        continue-on-error: true
+
       - name: Run Snyk Container Scan
         uses: snyk/actions/docker@master
         with:
